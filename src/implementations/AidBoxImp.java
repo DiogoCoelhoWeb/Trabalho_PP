@@ -14,6 +14,8 @@ import java.util.Objects;
  */
 public class AidBoxImp implements AidBox {
     
+    private final int MAX_CONTAINER = 4;
+    
     /**
      * The code of the aidbox
      */
@@ -54,7 +56,7 @@ public class AidBoxImp implements AidBox {
         this.zone = zone;
         this.refLocal = refLocal;
         this.geographicCoordinates = geographicCoordinates;
-        this.container = new Container[4]; // each aidbox has 4 containers ??
+        this.container = new Container[MAX_CONTAINER]; // to do : Perguntar ao stor sobre a capacidade de contentores
     }
     
     /**

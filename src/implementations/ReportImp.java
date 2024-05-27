@@ -10,4 +10,5 @@ import com.estg.pickingManagement.Report;
  */
 public class ReportImp implements Report{
     
+    private int nUsedVehicles;
 }

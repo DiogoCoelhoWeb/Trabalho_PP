@@ -6,11 +6,18 @@ package implementations;
 import com.estg.core.AidBox;
 import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.Vehicle;
+import com.estg.pickingManagement.exceptions.RouteException;
 /**
  *
  * @author diogo
  */
 public class RouteImp implements Route {
+    
+    private static int EXPAND_AIDBOX = 3;
+    
+    private static int INICIAL_AIDBOX = 2;
+    private int nAidBox;
+    
     
     
      /**
@@ -41,8 +48,10 @@ public class RouteImp implements Route {
      * @param totalDuration Total duration of the route
      */
     public RouteImp(double totalDistance, double totalDuration){
+        this.nAidBox = 0;
         this.totalDuration = totalDistance;
         this.totalDistance = totalDistance;
+        this.aidbox = new AidBox[INICIAL_AIDBOX];
     }
     
     
@@ -109,6 +118,43 @@ public class RouteImp implements Route {
         }
         return false;
     }
+    
+    private void expandAidBoxArray(){
+        
+        AidBox aux[] = new AidBox[this.aidbox.length + EXPAND_AIDBOX];
+
+        for (int i = 0; i < this.aidbox.length; i++) {
+            aux[i] = this.aidbox[i];
+        }
+
+        this.aidbox = aux;
+    }
+    
+    
+    @Override
+    public void addAidBox(AidBox aidbox) throws RouteException{
+        
+        if ( aidbox ==  null){
+            throw new RouteException("Cannot add a null aidbox");
+        }
+        
+        if (searchAidBox(aidbox) != -1){
+            throw new RouteException("Aidbox already at the route");
+        }
+        
+        // to do : 3 exceçao , hascontainer metodo para fazer
+        
+        if (this.nAidBox == this.aidbox.length){
+            expandAidBoxArray();
+        }
+        
+        this.aidbox[this.nAidBox++] = aidbox;
+    }
+    
+    @Override
+    public AidBox removeAidBox(AidBox aidbox) throws RouteException{
+        
+    } 
     
     
        

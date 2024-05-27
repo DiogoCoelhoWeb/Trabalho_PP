@@ -16,24 +16,24 @@ public class VehicleImp implements Vehicle{
     /**
      * To check if has items loaded or not
      */
-    private boolean loaded;
+    private ItemType loadedType;
     
     /**
      * The total Distance of the route
      */
     private int maxCapacity;
     private boolean status;
-    private ItemType vehicleType;
+    private ItemType itemType;
     
-    public VehicleImp (ItemType vehicleType , int maxCapacity, boolean status){
-        this.vehicleType = vehicleType;
+    public VehicleImp (ItemType itemType , int maxCapacity, boolean status){
+        this.itemType = itemType;
         this.maxCapacity = maxCapacity;
         this.status = status;
     }
     
     @Override
     public ItemType getSupplyType(){
-        return this.vehicleType;
+        return this.itemType;
     }
     
     @Override

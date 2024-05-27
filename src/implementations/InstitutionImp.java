@@ -7,6 +7,7 @@ import com.estg.core.AidBox;
 import com.estg.core.Institution;
 import com.estg.core.exceptions.VehicleException;
 import com.estg.pickingManagement.Vehicle;
+import com.estg.pickingManagement.PickingMap;
 /**
  *
  * @author diogo
@@ -14,8 +15,9 @@ import com.estg.pickingManagement.Vehicle;
 public class InstitutionImp implements Institution {
     
     private String name;
-    private VehicleImp[] vehicles;
-    private AidBoxImp[] aidBox;
+    private Vehicle[] vehicles;
+    private AidBox[] aidBoxes;
+    private PickingMap[] pickingMaps;
     
     // method constructor
     public InstitutionImp(){
@@ -29,7 +31,7 @@ public class InstitutionImp implements Institution {
     
     @Override
     public AidBox[] getAidBoxes(){
-        return this.aidBox;
+        return this.aidBoxes;
     }
     
     @Override 
