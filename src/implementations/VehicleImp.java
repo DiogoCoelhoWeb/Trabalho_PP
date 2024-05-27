@@ -23,7 +23,7 @@ public class VehicleImp implements Vehicle{
      */
     private int maxCapacity;
     private boolean status;
-    private ItemType[] vehicleType
+    private ItemType vehicleType;
     
     public VehicleImp (ItemType vehicleType , int maxCapacity, boolean status){
         this.vehicleType = vehicleType;

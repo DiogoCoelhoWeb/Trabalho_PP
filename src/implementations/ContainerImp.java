@@ -9,6 +9,7 @@ import com.estg.core.Container;
 import com.estg.core.Measurement;
 import com.estg.core.exceptions.MeasurementException;
 import java.time.LocalDate;
+import java.util.Objects;
 /**
  *
  * @author diogo
@@ -45,7 +46,7 @@ public class ContainerImp implements Container{
         this.code = code;
         this.capacity = capacity;
         this.containerType = containerType;
-        this.measurement = new Measurement[365]; // fazemos array de um ano??
+        this.measurement = new Measurement[365]; 
     }
                         
     /**
@@ -93,4 +94,27 @@ public class ContainerImp implements Container{
     public boolean addMeasurement(Measurement msrmnt) throws MeasurementException{
         
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ContainerImp other = (ContainerImp) obj;
+        return Objects.equals(this.code, other.code);
+    }
+    
+    
 }
