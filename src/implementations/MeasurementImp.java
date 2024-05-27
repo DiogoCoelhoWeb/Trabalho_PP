@@ -33,7 +33,7 @@ public class MeasurementImp implements Measurement{
     
     /**
      * Gets the date 
-     * @return the date
+     * @return LocalDateTime - the date
      */
     @Override
     public LocalDateTime getDate(){
@@ -42,7 +42,7 @@ public class MeasurementImp implements Measurement{
 
     /**
      * Gets the value in kilos
-     * @return the value
+     * @return double - the value
      */
     @Override
     public double getValue(){

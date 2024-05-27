@@ -15,6 +15,10 @@ import com.estg.pickingManagement.PickingMap;
 public class InstitutionImp implements Institution {
     
     private String name;
+    private int nAidBoxes;
+    private int nVehicles;
+    private int nPickingMaps;
+    
     private Vehicle[] vehicles;
     private AidBox[] aidBoxes;
     private PickingMap[] pickingMaps;
@@ -42,5 +46,9 @@ public class InstitutionImp implements Institution {
     @Override 
     public void disableVehicle(Vehicle vhcl) throws VehicleException{
        
+        if (vhcl == null){
+            throw new VehicleException("Vehicle cannot be null");
+        }
+        
     }
 }

@@ -17,9 +17,16 @@ import java.util.Objects;
  * @author diogo
  */
 public class ContainerImp implements Container {
-
-    private final int MEASUREMENT_FACTOR = 365;
-    private int measurementCounter = 0;
+    
+    /**
+     * The constant factor for the measurement array
+     */
+    private final int MEASUREMENT_FACTOR = 10;
+    
+    /**
+     * The counter for the measurements
+     */
+    private int measurementCounter;
 
     /**
      * The code of the container
@@ -52,12 +59,12 @@ public class ContainerImp implements Container {
         this.code = code;
         this.capacity = capacity;
         this.containerType = containerType;
+        this.measurementCounter = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR]; // fazemos array de um ano??
     }
 
     /**
      * Gets the code of the container
-     *
      * @return the code
      */
     @Override
@@ -67,7 +74,6 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the capacity of the container
-     *
      * @return the capacity
      */
     @Override
@@ -77,7 +83,6 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the type of the items that the container accepts
-     *
      * @return the containerType
      */
     @Override
@@ -97,7 +102,11 @@ public class ContainerImp implements Container {
 
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
-        // TO DO : PERGUNTAR 
+        
+        Measurement[] aux = new Measurement[1];
+        for (int i = 0 ; i < aux.length; i++){
+            
+        }
     }
 
     private void expandMeasuremnts(){

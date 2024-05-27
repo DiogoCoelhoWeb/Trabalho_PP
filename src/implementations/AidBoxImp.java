@@ -43,6 +43,7 @@ public class AidBoxImp implements AidBox {
     
     /**
      * Constructor for the Equipment
+     * 
      * @param code code of the aidbox
      * @param zone zone where is located
      * @param refLocal description of the place in which the Aid Box is installed.
@@ -61,7 +62,7 @@ public class AidBoxImp implements AidBox {
     
     /**
      * Gets the code of the aidbox
-     * @return the code
+     * @return String - the code
      */
     @Override
     public String getCode(){
@@ -70,7 +71,7 @@ public class AidBoxImp implements AidBox {
     
     /**
      * Gets the zone of the aidbox
-     * @return the zone
+     * @return String - the zone
      */
     @Override
     public String getZone(){
@@ -79,7 +80,7 @@ public class AidBoxImp implements AidBox {
     
     /**
      * Gets the description of the place in which the aidbox is installed
-     * @return the refLocal
+     * @return String - the refLocal
      */
     @Override
     public String getRefLocal(){
@@ -88,7 +89,7 @@ public class AidBoxImp implements AidBox {
     
     /**
      * Gets the Geographic Coordinates of the aidbox
-     * @return the geographicCoordinates
+     * @return GeographicCoordinates - the geographicCoordinates
      */
     @Override
     public GeographicCoordinates getCoordinates(){
