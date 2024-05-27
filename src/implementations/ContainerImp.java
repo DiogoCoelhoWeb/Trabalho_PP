@@ -38,6 +38,8 @@ public class ContainerImp implements Container {
      */
     private double capacity;
 
+    private double maxCapacity;
+    
     /**
      * The type of the container
      */
@@ -55,9 +57,10 @@ public class ContainerImp implements Container {
      * @param capacity capacity in kg of the container
      * @param containerType the type of items that belongs to the container
      */
-    public ContainerImp(String code, double capacity, ItemType containerType) {
+    public ContainerImp(String code, double maxCapacity, ItemType containerType) {
         this.code = code;
-        this.capacity = capacity;
+        this.capacity = 0;
+        this.maxCapacity = maxCapacity;
         this.containerType = containerType;
         this.measurementCounter = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR]; // fazemos array de um ano??
@@ -90,6 +93,10 @@ public class ContainerImp implements Container {
         return this.containerType;
     }
 
+    public double getMaxCapacity(){
+        return this.maxCapacity;
+    }
+    
     /**
      * Gets all measurements of the container
      *

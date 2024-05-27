@@ -7,6 +7,7 @@ package implementations;
 package project;
 import com.estg.core.ItemType;
 import com.estg.pickingManagement.Vehicle;
+import Enums.VehicleStatus;
 /**
  *
  * @author diogo
@@ -22,10 +23,10 @@ public class VehicleImp implements Vehicle{
      * The total Distance of the route
      */
     private int maxCapacity;
-    private boolean status;
+    private VehicleStatus status;
     private ItemType itemType;
     
-    public VehicleImp (ItemType itemType , int maxCapacity, boolean status){
+    public VehicleImp (ItemType itemType , int maxCapacity, VehicleStatus status){
         this.itemType = itemType;
         this.maxCapacity = maxCapacity;
         this.status = status;
@@ -43,11 +44,11 @@ public class VehicleImp implements Vehicle{
     
     
     // This method enables or disables the vehicle;
-    public void setStatus(boolean status){
+    public void setStatus(VehicleStatus status){
         this.status = status;
     }
     
-    public boolean getStatus(){
+    public VehicleStatus getStatus(){
         return this.status;
     }
     

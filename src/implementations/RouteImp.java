@@ -30,7 +30,7 @@ public class RouteImp implements Route {
     /**
      * The number of aidboxes in the route
      */
-    private int nAidBox;
+    private int nAidBoxes;
 
     /**
      * The total Distance of the route
@@ -50,7 +50,7 @@ public class RouteImp implements Route {
     /**
      * The array with all the aidboxes of the route
      */
-    private AidBox[] aidboxes;
+    private AidBox[] aidBoxes;
 
     /**
      * Constructor for the Route
@@ -59,10 +59,10 @@ public class RouteImp implements Route {
      * @param totalDuration Total duration of the route
      */
     public RouteImp(double totalDistance, double totalDuration) {
-        this.nAidBox = 0;
+        this.nAidBoxes = 0;
         this.totalDuration = totalDistance;
         this.totalDistance = totalDistance;
-        this.aidboxes = new AidBox[INICIAL_AIDBOX];
+        this.aidBoxes = new AidBox[INICIAL_AIDBOX];
     }
 
     /**
@@ -98,7 +98,7 @@ public class RouteImp implements Route {
      */
     @Override
     public AidBox[] getRoute() {
-        return this.aidboxes;
+        return this.aidBoxes;
     }
 
     /**
@@ -109,8 +109,8 @@ public class RouteImp implements Route {
      * find i
      */
     private int searchAidBox(AidBox aidbox) {
-        for (int i = 0; i < this.aidboxes.length; i++) { 
-            if (aidbox.equals(this.aidboxes[i])) {
+        for (int i = 0; i < this.aidBoxes.length; i++) { 
+            if (aidbox.equals(this.aidBoxes[i])) {
                 return i;
             }
         }
@@ -134,13 +134,13 @@ public class RouteImp implements Route {
      */
     private void expandAidBoxArray() {
 
-        AidBox aux[] = new AidBox[this.aidboxes.length + EXPAND_AIDBOX];
+        AidBox aux[] = new AidBox[this.aidBoxes.length * EXPAND_AIDBOX];
 
-        for (int i = 0; i < this.aidboxes.length; i++) {
-            aux[i] = this.aidboxes[i];
+        for (int i = 0; i < this.aidBoxes.length; i++) {
+            aux[i] = this.aidBoxes[i];
         }
 
-        this.aidboxes = aux;
+        this.aidBoxes = aux;
     }
 
     /**
@@ -194,11 +194,11 @@ public class RouteImp implements Route {
             throw new RouteException("Aidbox is not compatible with the vehicle designated to the route");
         }
 
-        if (this.nAidBox == this.aidboxes.length) {
+        if (this.nAidBoxes == this.aidBoxes.length) {
             expandAidBoxArray();
         }
 
-        this.aidboxes[this.nAidBox++] = aidbox;
+        this.aidBoxes[this.nAidBoxes++] = aidbox;
     }
 
     /**
@@ -226,8 +226,8 @@ public class RouteImp implements Route {
             return null;
         }
 
-        this.aidboxes[index] = this.aidboxes[this.nAidBox];
-        this.aidboxes[this.nAidBox--] = null;
+        this.aidBoxes[index] = this.aidBoxes[this.nAidBoxes];
+        this.aidBoxes[this.nAidBoxes--] = null;
         return aidbox;
 
     }
@@ -266,7 +266,7 @@ public class RouteImp implements Route {
         }
         
         index = searchAidBox(aidbox);
-        aidboxes[index] = aidbox1;
+        aidBoxes[index] = aidbox1;
         
     }
 

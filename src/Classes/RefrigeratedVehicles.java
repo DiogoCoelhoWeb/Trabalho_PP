@@ -4,6 +4,7 @@
  */
 package Classes;
 
+import Enums.VehicleStatus;
 import com.estg.core.ItemType;
 import implementations.VehicleImp;
 
@@ -15,7 +16,7 @@ public class RefrigeratedVehicles extends VehicleImp{
     
     private int maxKms;
     
-    public RefrigeratedVehicles(int maxCapacity,boolean status, int maxKms){
+    public RefrigeratedVehicles(int maxCapacity, VehicleStatus status, int maxKms){
         super(ItemType.PERISHABLE_FOOD, maxCapacity, status);
         this.maxKms = maxKms;    
     }
