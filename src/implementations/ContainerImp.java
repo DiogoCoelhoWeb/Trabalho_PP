@@ -15,6 +15,9 @@ import java.time.LocalDate;
  */
 public class ContainerImp implements Container{
     
+    private final int MEASUREMENT_FACTOR = 365;
+    private int measurementCounter = 0;
+    
     /**
      * The code of the container
      */
@@ -33,7 +36,7 @@ public class ContainerImp implements Container{
     /**
      * The measurement of the container daily
      */
-    private Measurement[] measurement;
+    private Measurement[] measurements;
     
      /**
      * Constructor for the Container
@@ -45,7 +48,7 @@ public class ContainerImp implements Container{
         this.code = code;
         this.capacity = capacity;
         this.containerType = containerType;
-        this.measurement = new Measurement[365]; // fazemos array de um ano??
+        this.measurements = new Measurement[MEASUREMENT_FACTOR]; // fazemos array de um ano??
     }
                         
     /**
@@ -81,7 +84,7 @@ public class ContainerImp implements Container{
      */
     @Override
     public Measurement[] getMeasurements(){
-       return this.measurement;
+       return this.measurements;
     }
     
     @Override
@@ -89,8 +92,27 @@ public class ContainerImp implements Container{
         
     }
     
+    private void expandMeasuremnts() throws OutOfMemoryError{
+        Measurement aux[] = new Measurement[this.measurements.length + MEASUREMENT_FACTOR];
+            
+        for(int i = 0; i < this.measurements.length; i++){
+            aux[i] = this.measurements[i];
+        }
+
+        this.measurements = aux;
+    }
+    
     @Override
     public boolean addMeasurement(Measurement msrmnt) throws MeasurementException{
         
+        //TODO: Perguntar ao Stor
+        
+        if(this.measurementCounter == this.measurements.length){
+            expandMeasuremnts();
+        }
+
+        this.measurements[this.measurementCounter++] = msrmnt;
+        
+        return true;
     }
 }
