@@ -11,11 +11,13 @@ import com.estg.pickingManagement.Vehicle;
 import com.estg.pickingManagement.PickingMap;
 import Enums.VehicleStatus;
 import com.estg.core.Container;
+import com.estg.core.ItemType;
 import com.estg.core.Measurement;
 import com.estg.core.exceptions.AidBoxException;
 import com.estg.core.exceptions.ContainerException;
 import com.estg.core.exceptions.MeasurementException;
 import com.estg.core.exceptions.PickingMapException;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -56,6 +58,42 @@ public class InstitutionImp implements Institution {
         return this.vehicles;
     }
 
+    private int searchAidBox(AidBox aidbox){
+        
+        for ( int i = 0 ; i < this.aidBoxes.length; i++){
+            if(aidbox.equals(this.aidBoxes[i])){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    private boolean hasContainer(ItemType it, AidBox aidbox) {
+
+        Container[] aux = aidbox.getContainers();
+        for (int i = 0; i < aux.length; i++) {
+            if (aux[i].getType() == it) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    @Override
+    public Container getContainer(AidBox aidbox, ItemType it) throws ContainerException{
+        
+        if ( searchAidBox(aidbox) == -1){
+            throw new ContainerException("Aidbox does not exist");
+        }
+        
+        if (!hasContainer(it,aidbox)){
+            throw new ContainerException("Container type does not exist in this aidbox");
+        }
+  
+        return aidBoxes[searchAidBox(aidbox)].getContainer(it);
+    }
+    
     @Override
     public double getDistance(AidBox aidbox) throws AidBoxException {
 
@@ -94,6 +132,7 @@ public class InstitutionImp implements Institution {
         ((VehicleImp) vhcl).setStatus(VehicleStatus.DISABLED);
     }
 
+    @Override
     public void enableVehicle(Vehicle vhcl) throws VehicleException {
 
         if (searchVehicle(vhcl) == -1) {
@@ -255,6 +294,9 @@ public class InstitutionImp implements Institution {
         return this.pickingMaps;
     } 
     
-    
+    @Override
+    public PickingMap[] getPickingMaps(LocalDateTime ldt, LocalDateTime ldt1){
+        
+    }
     
 }
