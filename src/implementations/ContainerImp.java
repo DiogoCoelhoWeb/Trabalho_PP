@@ -6,6 +6,7 @@ package implementations;
 
 import com.estg.core.ItemType;
 import Enums.ContainerType;
+import com.estg.core.AidBox;
 import com.estg.core.Container;
 import com.estg.core.Measurement;
 import com.estg.core.exceptions.MeasurementException;
@@ -68,7 +69,7 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the code of the container
-     * @return the code
+     * @return String - the code
      */
     @Override
     public String getCode() {
@@ -77,7 +78,7 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the capacity of the container
-     * @return the capacity
+     * @return double - the capacity
      */
     @Override
     public double getCapacity() {
@@ -86,7 +87,7 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the type of the items that the container accepts
-     * @return the containerType
+     * @return ItemType - the containerType
      */
     @Override
     public ItemType getType() {
@@ -99,22 +100,24 @@ public class ContainerImp implements Container {
     
     /**
      * Gets all measurements of the container
-     *
-     * @return the array of measurement
+     * @return Measurement[] - the array of measurement
      */
     @Override
     public Measurement[] getMeasurements() {
         return this.measurements;
     }
 
+    /**
+     * Gets all measurements from a specific date
+     * @param ld
+     * @return 
+     */
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
         
-        Measurement[] aux = new Measurement[1];
-        for (int i = 0 ; i < aux.length; i++){
-            
-        }
+          
     }
+   
 
     private void expandMeasuremnts(){
         Measurement aux[] = new Measurement[this.measurements.length + MEASUREMENT_FACTOR];
@@ -126,6 +129,12 @@ public class ContainerImp implements Container {
         this.measurements = aux;
     }
 
+    /**
+     * 
+     * @param msrmnt
+     * @return
+     * @throws MeasurementException 
+     */
     @Override
     public boolean addMeasurement(Measurement msrmnt) throws MeasurementException {
 
@@ -154,6 +163,17 @@ public class ContainerImp implements Container {
         // to do : Perguntar o return false;
     }
 
+    protected boolean hasContainer(ItemType it, AidBox aidbox) {
+
+        Container[] aux = aidbox.getContainers();
+        for (int i = 0; i < aux.length; i++) {
+            if (aux[i].getType() == it) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
