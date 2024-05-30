@@ -8,6 +8,7 @@ import com.estg.core.AidBox;
 import com.estg.core.GeographicCoordinates;
 import com.estg.core.Container;
 import com.estg.core.ItemType;
+import com.estg.core.exceptions.AidBoxException;
 import com.estg.core.exceptions.ContainerException;
 import java.util.Objects;
 
@@ -125,16 +126,6 @@ public class AidBoxImp implements AidBox {
         return null;
     }
 
-    private boolean checkTypeContainer(Container[] cntnr, ItemType it) {
-
-        for (int i = 0; i < cntnr.length; i++) {
-            if (cntnr[i].getType() == it) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void expandContainerArray() {
 
         Container[] aux = new Container[this.nContainers * EXPAND_ARRAY];
@@ -153,7 +144,7 @@ public class AidBoxImp implements AidBox {
             throw new ContainerException("Container cannot be null");
         }
 
-        if (checkTypeContainer(this.container, cntnr.getType())) {
+        if (((ContainerImp)cntnr).checkTypeContainer(this.container, cntnr.getType())) {
             throw new ContainerException("Container type already exist in the aidbox");
         }
 
@@ -171,6 +162,13 @@ public class AidBoxImp implements AidBox {
 
         return true;
 
+    }
+    
+    public double getDistance(AidBox aidbox) throws AidBoxException{
+        
+        if () {
+            
+        }
     }
 
     @Override

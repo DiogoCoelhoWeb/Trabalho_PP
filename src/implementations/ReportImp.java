@@ -4,6 +4,7 @@
  */
 package implementations;
 import com.estg.pickingManagement.Report;
+import java.time.LocalDateTime;
 /**
  *
  * @author diogo
@@ -11,4 +12,59 @@ import com.estg.pickingManagement.Report;
 public class ReportImp implements Report{
     
     private int nUsedVehicles;
+    private int nPickedContainers;
+    private double totalDistance;
+    private double totalDuration;
+    private int notPickedContainers;
+    private int notUsedVehicles;
+    private LocalDateTime date;
+
+    public ReportImp(int nUsedVehicles, int nPickedContainers, double totalDistance, double totalDuration, int nonPickedContainers, int nonUsedVehicles, LocalDateTime date) {
+        this.nUsedVehicles = nUsedVehicles;
+        this.nPickedContainers = nPickedContainers;
+        this.totalDistance = totalDistance;
+        this.totalDuration = totalDuration;
+        this.notPickedContainers = nonPickedContainers;
+        this.notUsedVehicles = nonUsedVehicles;
+        this.date = date;
+    }
+    
+    // FAZER O CONSTRUTOR AUTOMATICO ??? FAZER GETS DE VEICULOS QUE ESTAO A SER USADOS ETC ??
+
+    @Override
+    public int getUsedVehicles() {
+        return nUsedVehicles;
+    }
+
+    @Override
+    public int getPickedContainers() {
+        return nPickedContainers;
+    }
+
+    @Override
+    public double getTotalDistance() {
+        return totalDistance;
+    }
+
+    @Override
+    public double getTotalDuration() {
+        return totalDuration;
+    }
+
+    @Override
+    public int getNonPickedContainers() {
+        return notPickedContainers;
+    }
+
+    @Override
+    public int getNotUsedVehicles() {
+        return notUsedVehicles;
+    }
+
+    @Override
+    public LocalDateTime getDate() {
+        return date;
+    }
+    
+    
 }

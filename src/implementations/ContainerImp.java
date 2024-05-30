@@ -55,7 +55,7 @@ public class ContainerImp implements Container {
      * Constructor for the Container
      *
      * @param code code of the Container
-     * @param capacity capacity in kg of the container
+     * @param maxCapacity max capacity in kg of the container
      * @param containerType the type of items that belongs to the container
      */
     public ContainerImp(String code, double maxCapacity, ItemType containerType) {
@@ -64,7 +64,7 @@ public class ContainerImp implements Container {
         this.maxCapacity = maxCapacity;
         this.containerType = containerType;
         this.measurementCounter = 0;
-        this.measurements = new Measurement[MEASUREMENT_FACTOR]; // fazemos array de um ano??
+        this.measurements = new Measurement[MEASUREMENT_FACTOR]; 
     }
 
     /**
@@ -94,6 +94,10 @@ public class ContainerImp implements Container {
         return this.containerType;
     }
 
+    /**
+     * Gets the max capacity of the container
+     * @return double - the max capacity
+     */
     public double getMaxCapacity(){
         return this.maxCapacity;
     }
@@ -108,7 +112,7 @@ public class ContainerImp implements Container {
     }
 
     /**
-     * Gets all measurements from a specific date
+     * Gets all measurements of the container from a specific date
      * @param ld
      * @return 
      */
@@ -118,8 +122,10 @@ public class ContainerImp implements Container {
           
     }
    
-
-    private void expandMeasuremnts(){
+    /**
+     * This method expands the array of measurements
+     */
+    private void expandMeasurements(){
         Measurement aux[] = new Measurement[this.measurements.length + MEASUREMENT_FACTOR];
 
         for (int i = 0; i < this.measurements.length; i++) {
@@ -130,10 +136,15 @@ public class ContainerImp implements Container {
     }
 
     /**
-     * 
+     * This method add a new measurement to the container
      * @param msrmnt
-     * @return
-     * @throws MeasurementException 
+     * @return boolean - true if the measurement was inserted in the collection storing all measurements
+     * false if the measurement already exists for a given date.
+     * 
+     * @throws MeasurementException - if the measurement is null
+        if the value is lesser than 0
+        if the date is before the existing last measurement date
+        if the for a given date the measurement already exists but the values are different
      */
     @Override
     public boolean addMeasurement(Measurement msrmnt) throws MeasurementException {
@@ -152,22 +163,43 @@ public class ContainerImp implements Container {
         }
 
         // TO DO : perguntar a 4 !
+        
+        for ( int i = 0; i < this.measurements.length; i++ ){
+            if ( this.measurements[i].getDate() == msrmnt.getDate()){
+                return false; // VERIFICAR ESTA PARTE POR FAVOR
+            }
+        }
         if (this.measurementCounter == this.measurements.length) {
-            expandMeasuremnts();
+            expandMeasurements();
         }
 
         this.measurements[this.measurementCounter++] = msrmnt;
 
         return true;
         
-        // to do : Perguntar o return false;
     }
-
-    protected boolean hasContainer(ItemType it, AidBox aidbox) {
+    
+    /**
+     * This method verifies if there is a specific ItemType in a specific Aidbox
+     * @param it the ItemType that we want to search
+     * @param aidbox the aidbox we will search
+     * @return true if there is the specific itemtype in that aidbox , false otherwise
+     */
+    protected boolean hasContainer(ItemType it, AidBox aidbox) { // PROTECTED OU PRIVATED??
 
         Container[] aux = aidbox.getContainers();
         for (int i = 0; i < aux.length; i++) {
             if (aux[i].getType() == it) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    protected boolean checkTypeContainer(Container[] cntnr, ItemType it) {
+
+        for (int i = 0; i < cntnr.length; i++) {
+            if (cntnr[i].getType() == it) {
                 return true;
             }
         }

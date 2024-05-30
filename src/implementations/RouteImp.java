@@ -8,7 +8,6 @@ import com.estg.core.AidBox;
 import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.Vehicle;
 import com.estg.pickingManagement.exceptions.RouteException;
-import com.estg.core.ItemType;
 import com.estg.core.Container;
 
 /**
@@ -102,13 +101,13 @@ public class RouteImp implements Route {
     }
 
     /**
-     * Checks if the aidbox is already at the array
+     * Checks if the aidbox is already at the array of the route
      *
      * @param aidbox the Aid Box to check
      * @return int - i if aidbox exists in the array , otherwise return -1 if cannot
      * find i
      */
-    private int searchAidBox(AidBox aidbox) {
+    private int searchAidBoxAtRoute(AidBox aidbox) {
         for (int i = 0; i < this.aidBoxes.length; i++) { 
             if (aidbox.equals(this.aidBoxes[i])) {
                 return i;
@@ -124,7 +123,7 @@ public class RouteImp implements Route {
      */
     @Override
     public boolean containsAidBox(AidBox aidbox) {
-        return searchAidBox(aidbox) != -1;
+        return searchAidBoxAtRoute(aidbox) != -1;
     }
 
     /**
@@ -143,24 +142,6 @@ public class RouteImp implements Route {
         this.aidBoxes = aux;
     }
 
-    /**
-     * This method checks if a specific aidbox has the specific ItemType
-     *
-     * @param it The item type reference
-     * @param aidbox To check the containers of this aid box
-     * @return boolean - true if the aidbox contains at least one "it" (ItemType) 
-     * , false otherwise
-     */
-    private boolean hasContainer(ItemType it, AidBox aidbox) {
-
-        Container[] aux = aidbox.getContainers();
-        for (int i = 0; i < aux.length; i++) {
-            if (aux[i].getType() == it) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * private boolean hasContainer(ItemType it){
@@ -181,16 +162,17 @@ public class RouteImp implements Route {
      */
     @Override
     public void addAidBox(AidBox aidbox) throws RouteException {
-
+        Container aux = aidbox.getContainer(this.vehicle.getSupplyType());
+        
         if (aidbox == null) {
             throw new RouteException("Cannot add a null aidbox");
         }
 
-        if (searchAidBox(aidbox) != -1) {
+        if (searchAidBoxAtRoute(aidbox) != -1) {
             throw new RouteException("Aidbox already at the route");
         }
 
-        if (!hasContainer(this.vehicle.getSupplyType(), aidbox)) {
+        if (!((ContainerImp)aux).hasContainer(this.vehicle.getSupplyType(), aidbox)) {
             throw new RouteException("Aidbox is not compatible with the vehicle designated to the route");
         }
 
@@ -216,15 +198,11 @@ public class RouteImp implements Route {
             throw new RouteException("Cannot remove a null aidbox");
         }
 
-        if (searchAidBox(aidbox) == -1) {
+        if (searchAidBoxAtRoute(aidbox) == -1) {
             throw new RouteException("Aidbox does not exist in the route");
         }
 
-        index = searchAidBox(aidbox);
-
-        if (index == -1) {
-            return null;
-        }
+        index = searchAidBoxAtRoute(aidbox);
 
         this.aidBoxes[index] = this.aidBoxes[this.nAidBoxes];
         this.aidBoxes[this.nAidBoxes--] = null;
@@ -247,25 +225,25 @@ public class RouteImp implements Route {
     @Override
     public void replaceAidBox(AidBox aidbox, AidBox aidbox1) throws RouteException {
         int index;
+        Container aux = aidbox1.getContainer(this.vehicle.getSupplyType());
         
-        
-        if (aidbox == null && aidbox1 == null){
+        if (aidbox == null || aidbox1 == null){
             throw new RouteException("Cannot remove a null aidbox");
         }
         
-        if (searchAidBox(aidbox) == -1) {
+        if (searchAidBoxAtRoute(aidbox) == -1) {
             throw new RouteException("Aidbox does not exist in the route");
         }
         
-        if (searchAidBox(aidbox1) != -1){
+        if (searchAidBoxAtRoute(aidbox1) != -1){
             throw new RouteException("Aidbox to substitute is already at the route"); 
         }
         
-        if (!hasContainer(this.vehicle.getSupplyType(), aidbox1)) {
+        if (!((ContainerImp)aux).hasContainer(this.vehicle.getSupplyType(), aidbox1)) {
             throw new RouteException("Aidbox cannot be replaced . Is not compatible with the vehicle designated to the route");
         }
         
-        index = searchAidBox(aidbox);
+        index = searchAidBoxAtRoute(aidbox);
         aidBoxes[index] = aidbox1;
         
     }
