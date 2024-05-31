@@ -18,10 +18,17 @@ import java.util.Objects;
  */
 public class AidBoxImp implements AidBox {
 
-    private final int MAX_CONTAINER = 4;
-
+    
+    /**
+     * The expand array constant
+     */
     private static int EXPAND_ARRAY = 2;
-
+    
+    /**
+     * The number of many enums has in ItemType and inicialize the array
+     */
+    private int INICIALIZE_CONTAINER;
+    
     /**
      * The code of the aidbox
      */
@@ -46,7 +53,10 @@ public class AidBoxImp implements AidBox {
      * The details of the container
      */
     private Container[] container;
-
+    
+    /**
+     * The number of containers
+     */
     private int nContainers;
 
     /**
@@ -57,22 +67,21 @@ public class AidBoxImp implements AidBox {
      * @param refLocal description of the place in which the Aid Box is
      * installed.
      * @param geographicCoordinates geographicCoordinates of the aidbox
-     * @param container ................................
      */
     public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinates geographicCoordinates, Container container) {
+            GeographicCoordinates geographicCoordinates) {
 
         this.code = code;
         this.zone = zone;
         this.refLocal = refLocal;
         this.geographicCoordinates = geographicCoordinates;
-        this.container = new Container[MAX_CONTAINER]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
+        this.INICIALIZE_CONTAINER = ItemType.values().length; // vai saber quantas enums tem
+        this.container = new Container[INICIALIZE_CONTAINER]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
         this.nContainers = 0;
     }
 
     /**
      * Gets the code of the aidbox
-     *
      * @return String - the code
      */
     @Override
@@ -82,7 +91,6 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the zone of the aidbox
-     *
      * @return String - the zone
      */
     @Override
@@ -92,7 +100,6 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the description of the place in which the aidbox is installed
-     *
      * @return String - the refLocal
      */
     @Override
@@ -102,7 +109,6 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the Geographic Coordinates of the aidbox
-     *
      * @return GeographicCoordinates - the geographicCoordinates
      */
     @Override
@@ -110,11 +116,20 @@ public class AidBoxImp implements AidBox {
         return this.geographicCoordinates;
     }
     
+    /**
+     * Gets the array of the existing containers
+     * @return Container[] - a copy of the existing containers
+     */
     @Override
     public Container[] getContainers(){
         return this.container;
     }
 
+    /**
+     * Gets the container with a specific ItemType
+     * @param it - The item type
+     * @return Container - the container with the specific itemtype
+     */
     @Override
     public Container getContainer(ItemType it) {
 
@@ -126,6 +141,9 @@ public class AidBoxImp implements AidBox {
         return null;
     }
 
+    /**
+     * This method expands the container if necessary
+     */
     private void expandContainerArray() {
 
         Container[] aux = new Container[this.nContainers * EXPAND_ARRAY];
@@ -137,6 +155,14 @@ public class AidBoxImp implements AidBox {
         this.container = aux;
     }
 
+    /**
+     * This method adds a container in the array
+     * @param cntnr - The new container to add
+     * @return boolean - false if already exists the exact same container in the aidbox , 
+     * false otherwise
+     * @throws ContainerException - if the cntnr is null or if already contains inside 
+     * the aidbox the same item type 
+     */
     @Override
     public boolean addContainer(Container cntnr) throws ContainerException {
 
@@ -158,7 +184,7 @@ public class AidBoxImp implements AidBox {
             expandContainerArray();
         }
 
-        this.container[this.container.length] = cntnr;
+        this.container[this.nContainers++] = cntnr;
 
         return true;
 

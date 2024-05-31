@@ -15,14 +15,15 @@ public class RouteValidatorImp {
 
     public boolean validate(Route route, AidBox aidbox){
         
+        
         if (route == null){
             return false;
         }
         
         for ( int i = 0; i < route.getRoute().length; i++){
             if (aidbox.equals(route.getRoute()[i])){
-                return true;
-            } // VERIFICAR
+            return true;
+            }
         }
         return false;
     }

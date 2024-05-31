@@ -22,7 +22,7 @@ public class ContainerImp implements Container {
     /**
      * The constant factor for the measurement array
      */
-    private final int MEASUREMENT_FACTOR = 10;
+    private static final int MEASUREMENT_FACTOR = 10;
     
     /**
      * The counter for the measurements
@@ -39,6 +39,9 @@ public class ContainerImp implements Container {
      */
     private double capacity;
 
+    /**
+     * The max capacity of the container
+     */
     private double maxCapacity;
     
     /**
@@ -205,6 +208,7 @@ public class ContainerImp implements Container {
         }
         return false;
     }
+
     
     @Override
     public int hashCode() {

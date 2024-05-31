@@ -24,21 +24,45 @@ import java.time.LocalDateTime;
  * @author diogo
  */
 public class InstitutionImp implements Institution {
-
+    
+    /**
+     * The expand array constant
+     */
     private static int EXPAND_ARRAY = 2;
 
+    /**
+     * The name of the institution
+     */
     private String name;
+    
+    /**
+     * The number of aidboxes
+     */
     private int nAidBoxes;
-    private int nContainers;
+    
+    /**
+     * The number of vehicles
+     */
     private int nVehicles;
+    
+    /**
+     * The number of picking maps
+     */
     private int nPickingMaps;
 
+    /**
+     * The array of vehicles
+     */
     private Vehicle[] vehicles;
+    
+    /**
+     * The array of aidboxes
+     */
     private AidBox[] aidBoxes;
-    private Container[] containers;
+    
     private PickingMap[] pickingMaps;
 
-    // method constructor
+    
     public InstitutionImp() {
 
     }
@@ -108,15 +132,6 @@ public class InstitutionImp implements Institution {
         return -1;
     }
 
-    private int searchContainer(Container container) {
-
-        for (int i = 0; i < containers.length; i++) {
-            if (container.equals(this.containers[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     @Override
     public void disableVehicle(Vehicle vhcl) throws VehicleException {
@@ -217,10 +232,24 @@ public class InstitutionImp implements Institution {
         return true;
     }
 
+    private boolean compareContainer(Container cntnr){
+         
+        for ( int i = 0 ; i < this.aidBoxes.length; i++){
+            Container[] aux = this.aidBoxes[i].getContainers();
+            for (int j = 0; j < aux.length ; j++){
+                if(cntnr.equals(aux[j])){
+                    return true;                      
+                }
+            }
+        }
+        return false;
+    }
+    
+    @Override
     public boolean addMeasurement(Measurement msrmnt, Container cntnr) throws ContainerException, MeasurementException {
 
-        if (searchContainer(cntnr) == -1) {
-            throw new ContainerException("Container does not exist");
+        if (compareContainer(cntnr) == false){
+            throw new ContainerException("The container doesnt exit in the aidbox");
         }
 
         if (msrmnt.getValue() < 0 || msrmnt.getValue() > ((ContainerImp) cntnr).getMaxCapacity()) {
