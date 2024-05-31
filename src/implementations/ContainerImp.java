@@ -53,6 +53,9 @@ public class ContainerImp implements Container {
      * The measurement of the container daily
      */
     private Measurement[] measurements;
+    
+    private int nMeasurementsDaily;
+    private int nMeasurements;
 
     /**
      * Constructor for the Container
@@ -67,7 +70,8 @@ public class ContainerImp implements Container {
         this.maxCapacity = maxCapacity;
         this.containerType = containerType;
         this.measurementCounter = 0;
-        this.measurements = new Measurement[MEASUREMENT_FACTOR]; 
+        this.measurements = new Measurement[MEASUREMENT_FACTOR];
+        
     }
 
     /**
@@ -122,7 +126,6 @@ public class ContainerImp implements Container {
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
         
-          
     }
    
     /**

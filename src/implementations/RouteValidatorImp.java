@@ -6,15 +6,18 @@ package implementations;
 
 import com.estg.core.AidBox;
 import com.estg.pickingManagement.Route;
-
+import com.estg.pickingManagement.RouteValidator;
 /**
  *
  * @author diogo
  */
-public class RouteValidatorImp {
+public class RouteValidatorImp implements RouteValidator {
 
+    
+    
+    
+    @Override
     public boolean validate(Route route, AidBox aidbox){
-        
         
         if (route == null){
             return false;

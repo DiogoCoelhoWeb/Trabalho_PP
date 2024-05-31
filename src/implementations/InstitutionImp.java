@@ -92,29 +92,22 @@ public class InstitutionImp implements Institution {
         return -1;
     }
     
-    private boolean hasContainer(ItemType it, AidBox aidbox) {
-
-        Container[] aux = aidbox.getContainers();
-        for (int i = 0; i < aux.length; i++) {
-            if (aux[i].getType() == it) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     
     @Override
     public Container getContainer(AidBox aidbox, ItemType it) throws ContainerException{
+        
+        Container[] aux = aidbox.getContainers();
         
         if ( searchAidBox(aidbox) == -1){
             throw new ContainerException("Aidbox does not exist");
         }
         
-        if (!hasContainer(it,aidbox)){
-            throw new ContainerException("Container type does not exist in this aidbox");
+        for ( int i = 0 ; i < aux.length; i++){
+            if (aux[i].getType() != it){
+                throw new ContainerException("Container type does not exist in this aidbox");
+            }
+            
         }
-  
         return aidBoxes[searchAidBox(aidbox)].getContainer(it);
     }
     
@@ -140,11 +133,11 @@ public class InstitutionImp implements Institution {
             throw new VehicleException("Vehicle not found in this institution");
         }
 
-        if (((VehicleImp) vhcl).getStatus() == VehicleStatus.DISABLED) {
+        if (((VehicleImp)vhcl).getStatus() == VehicleStatus.DISABLED) {
             throw new VehicleException("Vehicle already disabled");
         }
 
-        ((VehicleImp) vhcl).setStatus(VehicleStatus.DISABLED);
+        ((VehicleImp)vhcl).setStatus(VehicleStatus.DISABLED);
     }
 
     @Override
@@ -178,7 +171,7 @@ public class InstitutionImp implements Institution {
         }
 
         if (searchVehicle(vhcl) != -1) {
-            return false; // e que tal criar uma exceçao aqui?
+            return false; 
         }
 
         if (this.nVehicles == this.vehicles.length) {

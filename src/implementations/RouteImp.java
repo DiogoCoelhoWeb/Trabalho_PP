@@ -19,7 +19,7 @@ public class RouteImp implements Route {
     /**
      * The constant to increase the aidbox array
      */
-    private static int EXPAND_AIDBOX = 2;
+    private static final int EXPAND_ARRAY = 2;
 
     /**
      * The constant to initialize the array
@@ -133,7 +133,7 @@ public class RouteImp implements Route {
      */
     private void expandAidBoxArray() {
 
-        AidBox aux[] = new AidBox[this.aidBoxes.length * EXPAND_AIDBOX];
+        AidBox aux[] = new AidBox[this.aidBoxes.length * EXPAND_ARRAY];
 
         for (int i = 0; i < this.aidBoxes.length; i++) {
             aux[i] = this.aidBoxes[i];
@@ -224,7 +224,7 @@ public class RouteImp implements Route {
      */
     @Override
     public void replaceAidBox(AidBox aidbox, AidBox aidbox1) throws RouteException {
-        int index;
+
         Container aux = aidbox1.getContainer(this.vehicle.getSupplyType());
         
         if (aidbox == null || aidbox1 == null){
@@ -243,8 +243,7 @@ public class RouteImp implements Route {
             throw new RouteException("Aidbox cannot be replaced . Is not compatible with the vehicle designated to the route");
         }
         
-        index = searchAidBoxAtRoute(aidbox);
-        aidBoxes[index] = aidbox1;
+        aidBoxes[searchAidBoxAtRoute(aidbox)] = aidbox1;
         
     }
 

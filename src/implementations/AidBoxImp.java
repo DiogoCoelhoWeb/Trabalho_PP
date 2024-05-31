@@ -22,12 +22,12 @@ public class AidBoxImp implements AidBox {
     /**
      * The expand array constant
      */
-    private static int EXPAND_ARRAY = 2;
+    private static  int EXPAND_ARRAY = 2;
     
     /**
      * The number of many enums has in ItemType and inicialize the array
      */
-    private int INICIALIZE_CONTAINER;
+    private int inicializeContainer;
     
     /**
      * The code of the aidbox
@@ -75,8 +75,8 @@ public class AidBoxImp implements AidBox {
         this.zone = zone;
         this.refLocal = refLocal;
         this.geographicCoordinates = geographicCoordinates;
-        this.INICIALIZE_CONTAINER = ItemType.values().length; // vai saber quantas enums tem
-        this.container = new Container[INICIALIZE_CONTAINER]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
+        this.inicializeContainer = ItemType.values().length; // vai saber quantas enums tem
+        this.container = new Container[inicializeContainer]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
         this.nContainers = 0;
     }
 
