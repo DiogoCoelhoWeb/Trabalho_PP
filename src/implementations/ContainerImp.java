@@ -23,11 +23,6 @@ public class ContainerImp implements Container {
      * The constant factor for the measurement array
      */
     private static final int MEASUREMENT_FACTOR = 10;
-    
-    /**
-     * The counter for the measurements
-     */
-    private int measurementCounter;
 
     /**
      * The code of the container
@@ -54,7 +49,6 @@ public class ContainerImp implements Container {
      */
     private Measurement[] measurements;
     
-    private int nMeasurementsDaily;
     private int nMeasurements;
 
     /**
@@ -69,7 +63,7 @@ public class ContainerImp implements Container {
         this.capacity = 0;
         this.maxCapacity = maxCapacity;
         this.containerType = containerType;
-        this.measurementCounter = 0;
+        this.nMeasurements = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR];
         
     }
@@ -118,6 +112,7 @@ public class ContainerImp implements Container {
         return this.measurements;
     }
 
+    
     /**
      * Gets all measurements of the container from a specific date
      * @param ld
@@ -126,6 +121,15 @@ public class ContainerImp implements Container {
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
         
+        Measurement[] aux = new Measurement[1];
+        
+        for ( int i = 0 ; i < this.measurements.length; i++){
+            if (measurements[i].getDate().toLocalDate().equals(ld)){
+                aux[0] = this.measurements[i];
+                break;
+            }
+        }
+        return aux;  // HARDCODE , PRECISAMOS DE VER ISTO A SERIO 
     }
    
     /**
@@ -164,7 +168,7 @@ public class ContainerImp implements Container {
             throw new MeasurementException("Cannot add a measurement less than 0");
         }
 
-        if (msrmnt.getDate().isBefore(this.measurements[this.measurementCounter - 1].getDate())) {
+        if (msrmnt.getDate().isBefore(this.measurements[this.nMeasurements - 1].getDate())) {
             throw new MeasurementException("Measurement cannot be before the last measurement");
         }
 
@@ -175,11 +179,11 @@ public class ContainerImp implements Container {
                 return false; // VERIFICAR ESTA PARTE POR FAVOR
             }
         }
-        if (this.measurementCounter == this.measurements.length) {
+        if (this.nMeasurements == this.measurements.length) {
             expandMeasurements();
         }
 
-        this.measurements[this.measurementCounter++] = msrmnt;
+        this.measurements[this.nMeasurements++] = msrmnt;
 
         return true;
         
@@ -212,6 +216,9 @@ public class ContainerImp implements Container {
         return false;
     }
 
+    protected double lastMeasurement(){
+        return this.measurements[this.nMeasurements - 1].getValue(); // 
+    }
     
     @Override
     public int hashCode() {

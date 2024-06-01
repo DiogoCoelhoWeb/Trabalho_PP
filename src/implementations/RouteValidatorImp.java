@@ -4,31 +4,41 @@
  */
 package implementations;
 
+import Classes.RefrigeratedVehicles;
 import com.estg.core.AidBox;
 import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.RouteValidator;
+
 /**
  *
  * @author diogo
  */
 public class RouteValidatorImp implements RouteValidator {
 
-    
-    
-    
     @Override
-    public boolean validate(Route route, AidBox aidbox){
-        
-        if (route == null){
+    public boolean validate(Route route, AidBox aidbox) {
+
+        if (route == null || aidbox == null) {
             return false;
         }
-        
-        for ( int i = 0; i < route.getRoute().length; i++){
-            if (aidbox.equals(route.getRoute()[i])){
-            return true;
+
+        // verifica se existe a aidbox na route
+        if (!route.containsAidBox(aidbox)) {
+            return false;
+        }
+
+        // Verificar se o veiculo consegue aguentar com o peso total da rota 
+        if (route.getVehicle().getMaxCapacity() < ((RouteImp) route).totalWeigthRoute()) {
+            return false;
+        }
+
+        // verificar se o RefrigeratedVehicles consegue fazer o totaldistance 
+        if (route.getVehicle() instanceof RefrigeratedVehicles) {
+            if (route.getTotalDistance() > ((RefrigeratedVehicles) route.getVehicle()).getMaxKms()) {
+                return false;
             }
         }
-        return false;
+
+        return true;
     }
 }
-

@@ -18,17 +18,16 @@ import java.util.Objects;
  */
 public class AidBoxImp implements AidBox {
 
-    
     /**
      * The expand array constant
      */
-    private static  int EXPAND_ARRAY = 2;
-    
+    private static int EXPAND_ARRAY = 2;
+
     /**
      * The number of many enums has in ItemType and inicialize the array
      */
     private int inicializeContainer;
-    
+
     /**
      * The code of the aidbox
      */
@@ -53,11 +52,14 @@ public class AidBoxImp implements AidBox {
      * The details of the container
      */
     private Container[] container;
-    
+
     /**
      * The number of containers
      */
     private int nContainers;
+
+    private int distance;
+    private int duration;
 
     /**
      * Constructor for the Equipment
@@ -67,10 +69,14 @@ public class AidBoxImp implements AidBox {
      * @param refLocal description of the place in which the Aid Box is
      * installed.
      * @param geographicCoordinates geographicCoordinates of the aidbox
+     * @param distance
+     * @param duration
      */
     public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinates geographicCoordinates) {
+            GeographicCoordinates geographicCoordinates, int distance, int duration) {
 
+        this.distance = distance;
+        this.duration = duration;
         this.code = code;
         this.zone = zone;
         this.refLocal = refLocal;
@@ -82,6 +88,7 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the code of the aidbox
+     *
      * @return String - the code
      */
     @Override
@@ -91,6 +98,7 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the zone of the aidbox
+     *
      * @return String - the zone
      */
     @Override
@@ -100,6 +108,7 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the description of the place in which the aidbox is installed
+     *
      * @return String - the refLocal
      */
     @Override
@@ -109,24 +118,27 @@ public class AidBoxImp implements AidBox {
 
     /**
      * Gets the Geographic Coordinates of the aidbox
+     *
      * @return GeographicCoordinates - the geographicCoordinates
      */
     @Override
     public GeographicCoordinates getCoordinates() {
         return this.geographicCoordinates;
     }
-    
+
     /**
      * Gets the array of the existing containers
+     *
      * @return Container[] - a copy of the existing containers
      */
     @Override
-    public Container[] getContainers(){
+    public Container[] getContainers() {
         return this.container;
     }
 
     /**
      * Gets the container with a specific ItemType
+     *
      * @param it - The item type
      * @return Container - the container with the specific itemtype
      */
@@ -134,7 +146,7 @@ public class AidBoxImp implements AidBox {
     public Container getContainer(ItemType it) {
 
         for (int i = 0; i < this.container.length; i++) {
-            if (this.container[i].getType() == it){
+            if (this.container[i].getType() == it) {
                 return this.container[i];
             }
         }
@@ -157,11 +169,12 @@ public class AidBoxImp implements AidBox {
 
     /**
      * This method adds a container in the array
+     *
      * @param cntnr - The new container to add
-     * @return boolean - false if already exists the exact same container in the aidbox , 
-     * false otherwise
-     * @throws ContainerException - if the cntnr is null or if already contains inside 
-     * the aidbox the same item type 
+     * @return boolean - false if already exists the exact same container in the
+     * aidbox , false otherwise
+     * @throws ContainerException - if the cntnr is null or if already contains
+     * inside the aidbox the same item type
      */
     @Override
     public boolean addContainer(Container cntnr) throws ContainerException {
@@ -170,7 +183,7 @@ public class AidBoxImp implements AidBox {
             throw new ContainerException("Container cannot be null");
         }
 
-        if (((ContainerImp)cntnr).checkTypeContainer(this.container, cntnr.getType())) {
+        if (((ContainerImp) cntnr).checkTypeContainer(this.container, cntnr.getType())) {
             throw new ContainerException("Container type already exist in the aidbox");
         }
 
@@ -189,12 +202,41 @@ public class AidBoxImp implements AidBox {
         return true;
 
     }
+
+    public double getDistance(){
+        return this.distance;
+    }
     
-    public double getDistance(AidBox aidbox) throws AidBoxException{
-        
-        if () {
-            
+    public double getDuration(){
+        return this.duration;
+    }
+    
+    /**
+     *
+     * @param aidbox
+     * @return
+     * @throws AidBoxException
+     */
+    @Override
+    public double getDistance(AidBox aidbox) throws AidBoxException {
+        if (aidbox == null) {
+            throw new AidBoxException("aidbox cannot be null");
         }
+        
+        return this.distance - ((AidBoxImp)aidbox).getDistance();
+        
+
+    }
+
+    @Override
+    public double getDuration(AidBox aidbox) throws AidBoxException {
+        
+        if (aidbox == null) {
+            throw new AidBoxException("aidbox cannot be null");
+        }
+        
+        return this.duration - ((AidBoxImp)aidbox).getDuration();
+        
     }
 
     @Override

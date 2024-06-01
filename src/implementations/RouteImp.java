@@ -66,6 +66,7 @@ public class RouteImp implements Route {
 
     /**
      * Gets the total distance of the route
+     *
      * @return the totalDistance
      */
     @Override
@@ -75,6 +76,7 @@ public class RouteImp implements Route {
 
     /**
      * Gets the total duration to travel the route
+     *
      * @return the totalDuration
      */
     @Override
@@ -84,6 +86,7 @@ public class RouteImp implements Route {
 
     /**
      * Gets the vehicle of the route
+     *
      * @return the vehicle
      */
     @Override
@@ -93,6 +96,7 @@ public class RouteImp implements Route {
 
     /**
      * Gets the route by each aidbox
+     *
      * @return the route
      */
     @Override
@@ -104,11 +108,11 @@ public class RouteImp implements Route {
      * Checks if the aidbox is already at the array of the route
      *
      * @param aidbox the Aid Box to check
-     * @return int - i if aidbox exists in the array , otherwise return -1 if cannot
-     * find i
+     * @return int - i if aidbox exists in the array , otherwise return -1 if
+     * cannot find i
      */
     private int searchAidBoxAtRoute(AidBox aidbox) {
-        for (int i = 0; i < this.aidBoxes.length; i++) { 
+        for (int i = 0; i < this.aidBoxes.length; i++) {
             if (aidbox.equals(this.aidBoxes[i])) {
                 return i;
             }
@@ -118,6 +122,7 @@ public class RouteImp implements Route {
 
     /**
      * Checks if the route contains an Aid Box
+     *
      * @param aidbox the Aid Box to check
      * @return boolean - true if the route contains the Aid Box, false otherwise
      */
@@ -142,7 +147,6 @@ public class RouteImp implements Route {
         this.aidBoxes = aux;
     }
 
-
     /**
      * private boolean hasContainer(ItemType it){
      *
@@ -150,8 +154,6 @@ public class RouteImp implements Route {
      * aidboxes[i].getContainers(); for (int j = 0; j < aux.length; j++){ if
      * (aux[j].getType() == it){ return true; } } } return false; }
      */
-    
-    
     /**
      * This method add a new aidbox to the route
      *
@@ -163,7 +165,7 @@ public class RouteImp implements Route {
     @Override
     public void addAidBox(AidBox aidbox) throws RouteException {
         Container aux = aidbox.getContainer(this.vehicle.getSupplyType());
-        
+
         if (aidbox == null) {
             throw new RouteException("Cannot add a null aidbox");
         }
@@ -172,7 +174,7 @@ public class RouteImp implements Route {
             throw new RouteException("Aidbox already at the route");
         }
 
-        if (!((ContainerImp)aux).hasContainer(this.vehicle.getSupplyType(), aidbox)) {
+        if (!((ContainerImp) aux).hasContainer(this.vehicle.getSupplyType(), aidbox)) {
             throw new RouteException("Aidbox is not compatible with the vehicle designated to the route");
         }
 
@@ -185,9 +187,10 @@ public class RouteImp implements Route {
 
     /**
      * This method removes a aidbox from the route
+     *
      * @param aidbox receives the aidbox to remove
      * @throws RouteException - when aidbox is null , or if the aidbox to remove
-     * is not in the route 
+     * is not in the route
      * @return aidbox - the removed aidbox
      */
     @Override
@@ -210,41 +213,81 @@ public class RouteImp implements Route {
 
     }
 
+    
+
     @Override
     public void insertAfter​(AidBox after, AidBox toInsert) throws RouteException {
-.
+
+        if (after == null || toInsert == null) {
+            throw new RouteException("Aidbox cannot be null");
+        }
+
+        if (!containsAidBox(after)) {
+            throw new RouteException("Aid Box to insert before is not in the route");
+        }
+
+        if (containsAidBox(toInsert)) {
+            throw new RouteException("Aid Box to insert is already in the route");
+        }
+
+        if (toInsert.getContainer(this.vehicle.getSupplyType()) == null) {
+            throw new RouteException("Aid Box to insert is not compatible with the vehicle");
+        }
+
+        int index = searchAidBoxAtRoute(after);
+        
+        if ( this.nAidBoxes == this.aidBoxes.length ){
+            expandAidBoxArray();
+        }
+        
+        for (int i = this.nAidBoxes ; i > index ; i--){
+            this.aidBoxes[i+1] = this.aidBoxes[i];
+        }
+        
+        this.aidBoxes[index + 1] = toInsert;
+        this.nAidBoxes++;
     }
 
     /**
      * This method replaces a aidbox for another
+     *
      * @param aidbox receives the aidbox already at the route
      * @param aidbox1 the aid box that will substitute the current one
-     * @throws RouteException - when aidbox is null , or if the aidbox is not 
-     * at the route , or if the aidbox1 is already at the route
+     * @throws RouteException - when aidbox is null , or if the aidbox is not at
+     * the route , or if the aidbox1 is already at the route
      */
     @Override
     public void replaceAidBox(AidBox aidbox, AidBox aidbox1) throws RouteException {
 
         Container aux = aidbox1.getContainer(this.vehicle.getSupplyType());
-        
-        if (aidbox == null || aidbox1 == null){
+
+        if (aidbox == null || aidbox1 == null) {
             throw new RouteException("Cannot remove a null aidbox");
         }
-        
+
         if (searchAidBoxAtRoute(aidbox) == -1) {
             throw new RouteException("Aidbox does not exist in the route");
         }
-        
-        if (searchAidBoxAtRoute(aidbox1) != -1){
-            throw new RouteException("Aidbox to substitute is already at the route"); 
+
+        if (searchAidBoxAtRoute(aidbox1) != -1) {
+            throw new RouteException("Aidbox to substitute is already at the route");
         }
-        
-        if (!((ContainerImp)aux).hasContainer(this.vehicle.getSupplyType(), aidbox1)) {
+
+        if (!((ContainerImp) aux).hasContainer(this.vehicle.getSupplyType(), aidbox1)) {
             throw new RouteException("Aidbox cannot be replaced . Is not compatible with the vehicle designated to the route");
         }
-        
+
         aidBoxes[searchAidBoxAtRoute(aidbox)] = aidbox1;
-        
+
     }
 
+    protected double totalWeigthRoute() {
+
+        double totalWeigth = 0;
+
+        for (int i = 0; i < this.aidBoxes.length; i++) {
+            totalWeigth += ((ContainerImp) this.aidBoxes[i].getContainer(this.vehicle.getSupplyType())).lastMeasurement();
+        }
+        return totalWeigth;
+    }
 }

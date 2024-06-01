@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  * @author diogo
  */
 public class InstitutionImp implements Institution {
-    
+
     /**
      * The expand array constant
      */
@@ -34,17 +34,17 @@ public class InstitutionImp implements Institution {
      * The name of the institution
      */
     private String name;
-    
+
     /**
      * The number of aidboxes
      */
     private int nAidBoxes;
-    
+
     /**
      * The number of vehicles
      */
     private int nVehicles;
-    
+
     /**
      * The number of picking maps
      */
@@ -54,15 +54,14 @@ public class InstitutionImp implements Institution {
      * The array of vehicles
      */
     private Vehicle[] vehicles;
-    
+
     /**
      * The array of aidboxes
      */
     private AidBox[] aidBoxes;
-    
+
     private PickingMap[] pickingMaps;
 
-    
     public InstitutionImp() {
 
     }
@@ -82,35 +81,34 @@ public class InstitutionImp implements Institution {
         return this.vehicles;
     }
 
-    private int searchAidBox(AidBox aidbox){
-        
-        for ( int i = 0 ; i < this.aidBoxes.length; i++){
-            if(aidbox.equals(this.aidBoxes[i])){
+    private int searchAidBox(AidBox aidbox) {
+
+        for (int i = 0; i < this.aidBoxes.length; i++) {
+            if (aidbox.equals(this.aidBoxes[i])) {
                 return i;
             }
         }
         return -1;
     }
-    
-    
+
     @Override
-    public Container getContainer(AidBox aidbox, ItemType it) throws ContainerException{
-        
+    public Container getContainer(AidBox aidbox, ItemType it) throws ContainerException {
+
         Container[] aux = aidbox.getContainers();
-        
-        if ( searchAidBox(aidbox) == -1){
+
+        if (searchAidBox(aidbox) == -1) {
             throw new ContainerException("Aidbox does not exist");
         }
-        
-        for ( int i = 0 ; i < aux.length; i++){
-            if (aux[i].getType() != it){
+
+        for (int i = 0; i < aux.length; i++) {
+            if (aux[i].getType() != it) {
                 throw new ContainerException("Container type does not exist in this aidbox");
             }
-            
+
         }
         return aidBoxes[searchAidBox(aidbox)].getContainer(it);
     }
-    
+
     @Override
     public double getDistance(AidBox aidbox) throws AidBoxException {
 
@@ -125,7 +123,6 @@ public class InstitutionImp implements Institution {
         return -1;
     }
 
-
     @Override
     public void disableVehicle(Vehicle vhcl) throws VehicleException {
 
@@ -133,11 +130,11 @@ public class InstitutionImp implements Institution {
             throw new VehicleException("Vehicle not found in this institution");
         }
 
-        if (((VehicleImp)vhcl).getStatus() == VehicleStatus.DISABLED) {
+        if (((VehicleImp) vhcl).getStatus() == VehicleStatus.DISABLED) {
             throw new VehicleException("Vehicle already disabled");
         }
 
-        ((VehicleImp)vhcl).setStatus(VehicleStatus.DISABLED);
+        ((VehicleImp) vhcl).setStatus(VehicleStatus.DISABLED);
     }
 
     @Override
@@ -151,7 +148,7 @@ public class InstitutionImp implements Institution {
             throw new VehicleException("Vehicle already enabled");
         }
 
-        ((VehicleImp)vhcl).setStatus(VehicleStatus.ENABLED);
+        ((VehicleImp) vhcl).setStatus(VehicleStatus.ENABLED);
     }
 
     private void expandVehicleArray() {
@@ -164,6 +161,7 @@ public class InstitutionImp implements Institution {
         this.vehicles = aux;
     }
 
+    @Override
     public boolean addVehicle(Vehicle vhcl) throws VehicleException {
 
         if (vhcl == null) {
@@ -171,7 +169,7 @@ public class InstitutionImp implements Institution {
         }
 
         if (searchVehicle(vhcl) != -1) {
-            return false; 
+            return false;
         }
 
         if (this.nVehicles == this.vehicles.length) {
@@ -225,23 +223,23 @@ public class InstitutionImp implements Institution {
         return true;
     }
 
-    private boolean compareContainer(Container cntnr){
-         
-        for ( int i = 0 ; i < this.aidBoxes.length; i++){
+    private boolean compareContainer(Container cntnr) {
+
+        for (int i = 0; i < this.aidBoxes.length; i++) {
             Container[] aux = this.aidBoxes[i].getContainers();
-            for (int j = 0; j < aux.length ; j++){
-                if(cntnr.equals(aux[j])){
-                    return true;                      
+            for (int j = 0; j < aux.length; j++) {
+                if (cntnr.equals(aux[j])) {
+                    return true;
                 }
             }
         }
         return false;
     }
-    
+
     @Override
     public boolean addMeasurement(Measurement msrmnt, Container cntnr) throws ContainerException, MeasurementException {
 
-        if (compareContainer(cntnr) == false){
+        if (compareContainer(cntnr) == false) {
             throw new ContainerException("The container doesnt exit in the aidbox");
         }
 
@@ -249,8 +247,15 @@ public class InstitutionImp implements Institution {
             throw new MeasurementException("Invalid measurement");
         }
 
-        // W T F , "Adds a new measurement to the Institution considering the Aid Box and container" , OK SIM E COMO
-        // É QUE SABE QUAL É O AIDBOX LOL
+        for (int i = 0; i < this.aidBoxes.length; i++) {
+            for (int j = 0; j < this.aidBoxes[i].getContainers().length; j++) {
+                if (cntnr.equals(this.aidBoxes[i].getContainers()[j])) {
+                    this.aidBoxes[i].getContainers()[j].addMeasurement(msrmnt);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private int searchPickingMap(PickingMap pm) {
@@ -270,6 +275,7 @@ public class InstitutionImp implements Institution {
         this.pickingMaps = aux;
     }
 
+    @Override
     public boolean addPickingMap(PickingMap pm) throws PickingMapException {
 
         if (pm == null) {
@@ -290,10 +296,10 @@ public class InstitutionImp implements Institution {
     }
 
     private int mostRecentPickingMap(PickingMap[] pm) {
-        
+
         int mostRecentIndex = 0;
-        for ( int i = 0 ; i < pm.length - 1; i++){
-            if( ((PickingMapImp)pm[i]).getDate().isAfter(((PickingMapImp)pm[i + 1]).getDate())){
+        for (int i = 0; i < pm.length - 1; i++) {
+            if (((PickingMapImp) pm[i]).getDate().isAfter(((PickingMapImp) pm[i + 1]).getDate())) {
                 mostRecentIndex = i;
             }
         }
@@ -309,16 +315,33 @@ public class InstitutionImp implements Institution {
 
         return this.pickingMaps[mostRecentPickingMap(this.pickingMaps)];
     }
-    
-    
+
     @Override
-    public PickingMap[] getPickingMaps(){
+    public PickingMap[] getPickingMaps() {
         return this.pickingMaps;
-    } 
-    
-    @Override
-    public PickingMap[] getPickingMaps(LocalDateTime ldt, LocalDateTime ldt1){
-        
     }
-    
+
+    @Override
+    public PickingMap[] getPickingMaps(LocalDateTime ldt, LocalDateTime ldt1) {
+
+        // para ficar um array exato
+        int count = 0;
+        for (int i = 0; i < this.pickingMaps.length; i++) {
+            if (this.pickingMaps[i].getDate().isAfter(ldt) && this.pickingMaps[i].getDate().isBefore(ldt1)) {
+                count++;
+            }
+        }
+
+        // Auxiliar para copiar direitinho o array
+        PickingMap[] aux = new PickingMap[count];
+        int j = 0;
+        for (int i = 0; i < this.pickingMaps.length; i++) {
+            if (this.pickingMaps[i].getDate().isAfter(ldt) && this.pickingMaps[i].getDate().isBefore(ldt1)) {
+                aux[j++] = this.pickingMaps[i];
+            }
+        }
+
+        return aux;
+    }
+
 }

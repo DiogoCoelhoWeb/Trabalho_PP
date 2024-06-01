@@ -14,10 +14,14 @@ import implementations.VehicleImp;
  */
 public class RefrigeratedVehicles extends VehicleImp{
     
-    private int maxKms;
+    private double maxKms;
     
-    public RefrigeratedVehicles(int maxCapacity, VehicleStatus status, int maxKms){
+    public RefrigeratedVehicles(int maxCapacity, VehicleStatus status, double maxKms){
         super(ItemType.PERISHABLE_FOOD, maxCapacity, status);
         this.maxKms = maxKms;    
+    }
+    
+    public double getMaxKms(){
+        return this.maxKms;
     }
 }

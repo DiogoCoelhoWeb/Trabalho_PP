@@ -21,6 +21,7 @@ public class MeasurementImp implements Measurement{
      */
     private LocalDateTime date;
     
+    
     /**
      * Constructor for the Route
      * @param value value in kgs  
@@ -48,4 +49,5 @@ public class MeasurementImp implements Measurement{
     public double getValue(){
         return this.value;
     }
+    
 }
