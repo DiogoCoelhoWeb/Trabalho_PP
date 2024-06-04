@@ -58,9 +58,6 @@ public class AidBoxImp implements AidBox {
      */
     private int nContainers;
 
-    private int distance;
-    private int duration;
-
     /**
      * Constructor for the Equipment
      *
@@ -72,11 +69,8 @@ public class AidBoxImp implements AidBox {
      * @param distance
      * @param duration
      */
-    public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinates geographicCoordinates, int distance, int duration) {
+    public AidBoxImp(String code, String zone, String refLocal, GeographicCoordinates geographicCoordinates, int distance, int duration) {
 
-        this.distance = distance;
-        this.duration = duration;
         this.code = code;
         this.zone = zone;
         this.refLocal = refLocal;
@@ -250,9 +244,11 @@ public class AidBoxImp implements AidBox {
         if (this == obj) {
             return true;
         }
+        
         if (obj == null) {
             return false;
         }
+        
         if (getClass() != obj.getClass()) {
             return false;
         }
