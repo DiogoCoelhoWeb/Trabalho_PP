@@ -24,7 +24,7 @@ public class ContainerImp implements Container {
     /**
      * The constant factor for the measurement array
      */
-    private static final int MEASUREMENT_FACTOR = 10;
+    private static final int MEASUREMENT_FACTOR = 15;
 
     /**
      * The code of the container

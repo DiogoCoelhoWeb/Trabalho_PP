@@ -29,23 +29,23 @@ public class ImportJSON {
         AidBoxImp aidBox = new AidBoxImp(
                 (String) jsonObject.get("Codigo"),
                 (String) jsonObject.get("Zona"),
-                null, // refLocal is not provided in the JSON
+                null,
                 new GeographicCoordinatesImp((double) jsonObject.get("Latitude"), (double) jsonObject.get("Longitude")),
-                new Locations[0] // locations is not provided in the JSON
+                new Locations[0] // falta adicionar as localizaçoes
         );
 
-        JSONArray contentores = (JSONArray) jsonObject.get("Contentores");
-        Container[] contentorArray = new Container[contentores.size()];
-        for (int j = 0; j < contentores.size(); j++) {
-            JSONObject cont = (JSONObject) contentores.get(j);
-            Container contentor = new ContainerImp(
-                    (String) cont.get("codigo"),
-                    ((Long) cont.get("capacidade")).doubleValue(),
+        JSONArray Containers = (JSONArray) jsonObject.get("Contentores");
+        Container[] contentorArray = new Container[Containers.size()];
+        for (int j = 0; j < Containers.size(); j++) {
+            JSONObject container = (JSONObject) Containers.get(j);
+            Container aux = new ContainerImp(
+                    (String) container.get("codigo"),
+                    ((Long) container.get("capacidade")).doubleValue(),
                     null);
 
-            ((ContainerImp) contentor).setCode((String) cont.get("codigo"));
-            ((ContainerImp) contentor).setMaxCapacity(((Long) cont.get("capacidade")).doubleValue());
-            contentorArray[j] = contentor;
+            ((ContainerImp) aux).setCode((String) container.get("codigo"));
+            ((ContainerImp) aux).setMaxCapacity(((Long) container.get("capacidade")).doubleValue());
+            contentorArray[j] = aux;
         }
         aidBox.setContainers(contentorArray);
 
