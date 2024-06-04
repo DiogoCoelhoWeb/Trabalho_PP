@@ -4,6 +4,8 @@
  */
 package implementations;
 
+import Classes.Location;
+import Classes.Locations;
 import com.estg.core.AidBox;
 import com.estg.core.GeographicCoordinates;
 import com.estg.core.Container;
@@ -57,9 +59,10 @@ public class AidBoxImp implements AidBox {
      * The number of containers
      */
     private int nContainers;
+    
+    private Locations[] locations;
 
-    private int distance;
-    private int duration;
+    
 
     /**
      * Constructor for the Equipment
@@ -73,10 +76,8 @@ public class AidBoxImp implements AidBox {
      * @param duration
      */
     public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinates geographicCoordinates, int distance, int duration) {
+            GeographicCoordinates geographicCoordinates, int distance, int duration, Locations[] locations) {
 
-        this.distance = distance;
-        this.duration = duration;
         this.code = code;
         this.zone = zone;
         this.refLocal = refLocal;
@@ -84,6 +85,7 @@ public class AidBoxImp implements AidBox {
         this.inicializeContainer = ItemType.values().length; // vai saber quantas enums tem
         this.container = new Container[inicializeContainer]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
         this.nContainers = 0;
+        this.locations =locations; 
     }
 
     /**
@@ -203,14 +205,28 @@ public class AidBoxImp implements AidBox {
 
     }
 
-    public double getDistance(){
-        return this.distance;
+    
+    protected double getValueDistance(AidBox from, AidBox nameTo){
+        double distance = 0;
+        int indexFrom = 0;
+        
+        for(int i = 0; i < locations.length; i++){
+            if ( from.getCode().equals(this.locations[i].getNameFrom())){
+                indexFrom = i;
+            }
+        }
+        
+        Location[] aux = locations[indexFrom].getLocationTo();
+        
+        for(int j = 0 ; j < aux.length; j++){
+            if (aux[j].getName().equals(nameTo.getCode())){
+                distance = aux[j].getDistance();
+            }
+        }
+        return distance;
     }
     
-    public double getDuration(){
-        return this.duration;
-    }
-    
+
     /**
      *
      * @param aidbox
@@ -223,21 +239,40 @@ public class AidBoxImp implements AidBox {
             throw new AidBoxException("aidbox cannot be null");
         }
         
-        return this.distance - ((AidBoxImp)aidbox).getDistance();
-        
-
+        return getValueDistance(this,aidbox);
     }
 
+    
+    protected double getValueDuration(AidBox from, AidBox nameTo){
+        double duration = 0;
+        int indexFrom = 0;
+        
+        for(int i = 0; i < locations.length; i++){
+            if ( from.getCode().equals(this.locations[i].getNameFrom())){
+                indexFrom = i;
+            }
+        }
+        
+        Location[] aux = locations[indexFrom].getLocationTo();
+        
+        for(int j = 0 ; j < aux.length; j++){
+            if (aux[j].getName().equals(nameTo.getCode())){
+                duration = aux[j].getDuration();
+            }
+        }
+        return duration;
+    }
+    
     @Override
     public double getDuration(AidBox aidbox) throws AidBoxException {
-        
         if (aidbox == null) {
             throw new AidBoxException("aidbox cannot be null");
         }
-        
-        return this.duration - ((AidBoxImp)aidbox).getDuration();
-        
+
+       return getValueDuration(this , aidbox);
+
     }
+        
 
     @Override
     public int hashCode() {
@@ -261,3 +296,4 @@ public class AidBoxImp implements AidBox {
     }
 
 }
+ 

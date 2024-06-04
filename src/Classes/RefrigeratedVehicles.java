@@ -17,7 +17,8 @@ public class RefrigeratedVehicles extends VehicleImp{
     private double maxKms;
     
     public RefrigeratedVehicles(int maxCapacity, VehicleStatus status, double maxKms){
-        super(ItemType.PERISHABLE_FOOD, maxCapacity, status);
+        super(maxCapacity, status);
+        super.setItemType(ItemType.PERISHABLE_FOOD);
         this.maxKms = maxKms;    
     }
     

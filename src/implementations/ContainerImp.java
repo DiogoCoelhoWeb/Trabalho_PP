@@ -12,13 +12,15 @@ import com.estg.core.Measurement;
 import com.estg.core.exceptions.MeasurementException;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author diogo
  */
 public class ContainerImp implements Container {
-    
+
     /**
      * The constant factor for the measurement array
      */
@@ -38,7 +40,7 @@ public class ContainerImp implements Container {
      * The max capacity of the container
      */
     private double maxCapacity;
-    
+
     /**
      * The type of the container
      */
@@ -48,7 +50,7 @@ public class ContainerImp implements Container {
      * The measurement of the container daily
      */
     private Measurement[] measurements;
-    
+
     private int nMeasurements;
 
     /**
@@ -65,11 +67,12 @@ public class ContainerImp implements Container {
         this.containerType = containerType;
         this.nMeasurements = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR];
-        
+
     }
 
     /**
      * Gets the code of the container
+     *
      * @return String - the code
      */
     @Override
@@ -79,6 +82,7 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the capacity of the container
+     *
      * @return double - the capacity
      */
     @Override
@@ -88,6 +92,7 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the type of the items that the container accepts
+     *
      * @return ItemType - the containerType
      */
     @Override
@@ -97,14 +102,16 @@ public class ContainerImp implements Container {
 
     /**
      * Gets the max capacity of the container
+     *
      * @return double - the max capacity
      */
-    public double getMaxCapacity(){
+    public double getMaxCapacity() {
         return this.maxCapacity;
     }
-    
+
     /**
      * Gets all measurements of the container
+     *
      * @return Measurement[] - the array of measurement
      */
     @Override
@@ -112,30 +119,42 @@ public class ContainerImp implements Container {
         return this.measurements;
     }
 
-    
     /**
      * Gets all measurements of the container from a specific date
+     *
      * @param ld
-     * @return 
+     * @return
      */
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
-        
-        Measurement[] aux = new Measurement[1];
-        
-        for ( int i = 0 ; i < this.measurements.length; i++){
-            if (measurements[i].getDate().toLocalDate().equals(ld)){
-                aux[0] = this.measurements[i];
-                break;
+
+        int count = 0;
+
+        for (int i = 0; i < this.measurements.length; i++) {
+            if (this.measurements[i].getDate().toLocalDate().equals(ld)) {
+                count++;
             }
         }
-        return aux;  // HARDCODE , PRECISAMOS DE VER ISTO A SERIO 
+
+        Measurement[] aux = new Measurement[count];
+        int j = 0;
+        for (int i = 0; i < this.measurements.length; i++) {
+            if (this.measurements[i].getDate().toLocalDate().equals(ld)) {
+                try {
+                    aux[j] = ((MeasurementImp)this.measurements[i]).clone();
+                    j++;
+                } catch (CloneNotSupportedException e) {
+                    // ACABAR
+                }
+            }
+        }
+        return aux;
     }
-   
+
     /**
      * This method expands the array of measurements
      */
-    private void expandMeasurements(){
+    private void expandMeasurements() {
         Measurement aux[] = new Measurement[this.measurements.length + MEASUREMENT_FACTOR];
 
         for (int i = 0; i < this.measurements.length; i++) {
@@ -147,14 +166,16 @@ public class ContainerImp implements Container {
 
     /**
      * This method add a new measurement to the container
+     *
      * @param msrmnt
-     * @return boolean - true if the measurement was inserted in the collection storing all measurements
-     * false if the measurement already exists for a given date.
-     * 
-     * @throws MeasurementException - if the measurement is null
-        if the value is lesser than 0
-        if the date is before the existing last measurement date
-        if the for a given date the measurement already exists but the values are different
+     * @return boolean - true if the measurement was inserted in the collection
+     * storing all measurements false if the measurement already exists for a
+     * given date.
+     *
+     * @throws MeasurementException - if the measurement is null if the value is
+     * lesser than 0 if the date is before the existing last measurement date if
+     * the for a given date the measurement already exists but the values are
+     * different
      */
     @Override
     public boolean addMeasurement(Measurement msrmnt) throws MeasurementException {
@@ -173,9 +194,8 @@ public class ContainerImp implements Container {
         }
 
         // TO DO : perguntar a 4 !
-        
-        for ( int i = 0; i < this.measurements.length; i++ ){
-            if ( this.measurements[i].getDate() == msrmnt.getDate()){
+        for (int i = 0; i < this.measurements.length; i++) {
+            if (this.measurements[i].getDate() == msrmnt.getDate()) {
                 return false; // VERIFICAR ESTA PARTE POR FAVOR
             }
         }
@@ -186,14 +206,16 @@ public class ContainerImp implements Container {
         this.measurements[this.nMeasurements++] = msrmnt;
 
         return true;
-        
+
     }
-    
+
     /**
      * This method verifies if there is a specific ItemType in a specific Aidbox
+     *
      * @param it the ItemType that we want to search
      * @param aidbox the aidbox we will search
-     * @return true if there is the specific itemtype in that aidbox , false otherwise
+     * @return true if there is the specific itemtype in that aidbox , false
+     * otherwise
      */
     protected boolean hasContainer(ItemType it, AidBox aidbox) { // PROTECTED OU PRIVATED??
 
@@ -205,7 +227,7 @@ public class ContainerImp implements Container {
         }
         return false;
     }
-    
+
     protected boolean checkTypeContainer(Container[] cntnr, ItemType it) {
 
         for (int i = 0; i < cntnr.length; i++) {
@@ -216,10 +238,10 @@ public class ContainerImp implements Container {
         return false;
     }
 
-    protected double lastMeasurement(){
+    protected double lastMeasurement() {
         return this.measurements[this.nMeasurements - 1].getValue(); // 
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 3;

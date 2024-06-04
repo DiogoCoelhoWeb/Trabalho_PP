@@ -9,6 +9,8 @@ import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.Vehicle;
 import com.estg.pickingManagement.exceptions.RouteException;
 import com.estg.core.Container;
+import com.estg.core.exceptions.AidBoxException;
+import Classes.Locations;
 
 /**
  *
@@ -52,15 +54,16 @@ public class RouteImp implements Route {
     private AidBox[] aidBoxes;
 
     /**
+     * 
+     */
+    private Locations[] locations;
+    
+    /**
      * Constructor for the Route
      *
-     * @param totalDistance Distance of the route
-     * @param totalDuration Total duration of the route
      */
-    public RouteImp(double totalDistance, double totalDuration) {
+    public RouteImp() {
         this.nAidBoxes = 0;
-        this.totalDuration = totalDistance;
-        this.totalDistance = totalDistance;
         this.aidBoxes = new AidBox[INICIAL_AIDBOX];
     }
 
@@ -71,7 +74,12 @@ public class RouteImp implements Route {
      */
     @Override
     public double getTotalDistance() {
-        return this.totalDistance;
+        double totalDistance = 0;
+        
+        for ( int i = 0; i < this.aidBoxes.length ; i++){
+            totalDistance += ((AidBoxImp)this.aidBoxes[i]).getValueDistance(this.aidBoxes[i], this.aidBoxes[i+1]);
+        }
+        return totalDistance;
     }
 
     /**
@@ -81,7 +89,12 @@ public class RouteImp implements Route {
      */
     @Override
     public double getTotalDuration() {
-        return this.totalDuration;
+        double totalDuration = 0;
+        
+        for ( int i = 0; i < this.aidBoxes.length ; i++){
+            totalDuration += ((AidBoxImp)this.aidBoxes[i]).getValueDuration(this.aidBoxes[i], this.aidBoxes[i+1]);
+        }
+        return totalDuration;
     }
 
     /**

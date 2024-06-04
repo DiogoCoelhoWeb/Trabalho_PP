@@ -22,9 +22,16 @@ public class RouteValidatorImp implements RouteValidator {
             return false;
         }
 
-        // verifica se existe a aidbox na route
-        if (!route.containsAidBox(aidbox)) {
-            return false;
+        
+        
+        
+        // Verificar se a aidbox tem artigos para levantar 
+        for (int i = 0; i < aidbox.getContainers().length; i++) {
+            for (int j = 0; j < aidbox.getContainers()[i].getMeasurements().length; j++) {
+                if (aidbox.getContainers()[i].getMeasurements()[j].getValue() <= 0) {
+                    return false;
+                }
+            }
         }
 
         // Verificar se o veiculo consegue aguentar com o peso total da rota 

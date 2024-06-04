@@ -50,4 +50,13 @@ public class MeasurementImp implements Measurement{
         return this.value;
     }
     
+    @Override
+    public Measurement clone() throws CloneNotSupportedException {
+        try {
+            return (Measurement) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); 
+        }
+    }
+    
 }
