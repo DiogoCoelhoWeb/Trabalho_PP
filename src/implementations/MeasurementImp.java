@@ -59,4 +59,11 @@ public class MeasurementImp implements Measurement{
         }
     }
     
+    @Override
+    public String toString(){
+        String s = "";
+        s += "Value: " + this.value + "\n";
+        s += "Date: " + this.date + "\n";
+        return s;
+    }
 }

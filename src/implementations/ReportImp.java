@@ -65,6 +65,33 @@ public class ReportImp implements Report{
     public LocalDateTime getDate() {
         return date;
     }
+
+    public void setUsedVehicles(int nUsedVehicles) {
+        this.nUsedVehicles = nUsedVehicles;
+    }
+
+    public void setPickedContainers(int nPickedContainers) {
+        this.nPickedContainers = nPickedContainers;
+    }
+
+    public void setTotalDistance(double totalDistance) {
+        this.totalDistance = totalDistance;
+    }
+
+    public void setTotalDuration(double totalDuration) {
+        this.totalDuration = totalDuration;
+    }
+
+    public void setNotPickedContainers(int notPickedContainers) {
+        this.notPickedContainers = notPickedContainers;
+    }
+
+    public void setNotUsedVehicles(int notUsedVehicles) {
+        this.notUsedVehicles = notUsedVehicles;
+    }
     
+    public void setDate(LocalDateTime date){
+        this.date = date;
+    }
     
 }

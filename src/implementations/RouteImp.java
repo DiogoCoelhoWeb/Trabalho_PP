@@ -9,7 +9,6 @@ import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.Vehicle;
 import com.estg.pickingManagement.exceptions.RouteException;
 import com.estg.core.Container;
-import com.estg.core.exceptions.AidBoxException;
 import Classes.Locations;
 
 /**
@@ -29,30 +28,20 @@ public class RouteImp implements Route {
     private static int INICIAL_AIDBOX = 2;
 
     /**
+     * The array with all the aidboxes of the route
+     */
+    private AidBox[] aidBoxes;
+
+    /**
      * The number of aidboxes in the route
      */
     private int nAidBoxes;
 
     /**
-     * The total Distance of the route
-     */
-    private double totalDistance;
-
-    /**
-     * The total Duration of the route
-     */
-    private double totalDuration;
-
-    /**
      * The vehicle of the route
      */
     private Vehicle vehicle;
-
-    /**
-     * The array with all the aidboxes of the route
-     */
-    private AidBox[] aidBoxes;
-
+    
     /**
      * 
      */
@@ -62,10 +51,13 @@ public class RouteImp implements Route {
      * Constructor for the Route
      *
      */
-    public RouteImp() {
+    public RouteImp(VehicleImp vehicleImp) {
+        this.vehicle = vehicle;
         this.nAidBoxes = 0;
         this.aidBoxes = new AidBox[INICIAL_AIDBOX];
     }
+
+    
 
     /**
      * Gets the total distance of the route
@@ -76,7 +68,7 @@ public class RouteImp implements Route {
     public double getTotalDistance() {
         double totalDistance = 0;
         
-        for ( int i = 0; i < this.aidBoxes.length ; i++){
+        for ( int i = 0; i < this.aidBoxes.length - 1; i++){
             totalDistance += ((AidBoxImp)this.aidBoxes[i]).getValueDistance(this.aidBoxes[i], this.aidBoxes[i+1]);
         }
         return totalDistance;
@@ -91,7 +83,7 @@ public class RouteImp implements Route {
     public double getTotalDuration() {
         double totalDuration = 0;
         
-        for ( int i = 0; i < this.aidBoxes.length ; i++){
+        for ( int i = 0; i < this.aidBoxes.length - 1 ; i++){
             totalDuration += ((AidBoxImp)this.aidBoxes[i]).getValueDuration(this.aidBoxes[i], this.aidBoxes[i+1]);
         }
         return totalDuration;
@@ -145,7 +137,7 @@ public class RouteImp implements Route {
     }
 
     /**
-     * Increase the capacity of the array Aidbox[], twice the current size This
+     * Increase the capacity of the array Aidbox[], twice the current size This method
      * is creating a temporary array (aux) with the new size, and then copying
      * the old array to the new one, replacing it
      */
@@ -160,21 +152,6 @@ public class RouteImp implements Route {
         this.aidBoxes = aux;
     }
 
-    /**
-     * private boolean hasContainer(ItemType it){
-     *
-     * for (int i = 0 ; i < this.aidboxes.length; i++){ Container[] aux =
-     * aidboxes[i].getContainers(); for (int j = 0; j < aux.length; j++){ if
-     * (aux[j].getType() == it){ return true; } } } return false; }
-     */
-    /**
-     * This method add a new aidbox to the route
-     *
-     * @param aidbox receives the aidbox to add
-     * @throws RouteException when aidbox is null , or if already exists , or if
-     * the aidbox has containers that isnt the same type as the vehicle of the
-     * route
-     */
     @Override
     public void addAidBox(AidBox aidbox) throws RouteException {
         Container aux = aidbox.getContainer(this.vehicle.getSupplyType());
@@ -254,8 +231,10 @@ public class RouteImp implements Route {
         }
         
         for (int i = this.nAidBoxes ; i > index ; i--){
+        if (i+1 < this.aidBoxes.length) { 
             this.aidBoxes[i+1] = this.aidBoxes[i];
         }
+    }
         
         this.aidBoxes[index + 1] = toInsert;
         this.nAidBoxes++;

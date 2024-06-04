@@ -59,10 +59,8 @@ public class AidBoxImp implements AidBox {
      * The number of containers
      */
     private int nContainers;
-    
-    private Locations[] locations;
 
-    
+    private Locations[] locations;
 
     /**
      * Constructor for the Equipment
@@ -72,20 +70,19 @@ public class AidBoxImp implements AidBox {
      * @param refLocal description of the place in which the Aid Box is
      * installed.
      * @param geographicCoordinates geographicCoordinates of the aidbox
-     * @param distance
-     * @param duration
+     *
      */
     public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinates geographicCoordinates, int distance, int duration, Locations[] locations) {
+            GeographicCoordinatesImp geographicCoordinates, Locations[] locations) {
 
         this.code = code;
         this.zone = zone;
         this.refLocal = refLocal;
         this.geographicCoordinates = geographicCoordinates;
-        this.inicializeContainer = ItemType.values().length; // vai saber quantas enums tem
-        this.container = new Container[inicializeContainer]; //sera necessario expandir dinamicamente , pois podera ter um tipo novo no futuro
+        this.inicializeContainer = ItemType.values().length; // inicializar com o número de enums ItemType
+        this.container = new Container[inicializeContainer]; // inicializar com um tamanho maior que 0
         this.nContainers = 0;
-        this.locations =locations; 
+        this.locations = locations;
     }
 
     /**
@@ -154,6 +151,10 @@ public class AidBoxImp implements AidBox {
         }
         return null;
     }
+    
+    public void setContainers(Container[] cnt){
+        this.container = cnt;
+    }
 
     /**
      * This method expands the container if necessary
@@ -185,12 +186,14 @@ public class AidBoxImp implements AidBox {
             throw new ContainerException("Container cannot be null");
         }
 
-        if (((ContainerImp) cntnr).checkTypeContainer(this.container, cntnr.getType())) {
-            throw new ContainerException("Container type already exist in the aidbox");
+        for (int i = 0; i < this.nContainers; i++) {
+            if (this.container[i] != null && this.container[i].getType() == cntnr.getType()) {
+                throw new ContainerException("Container type already exist in the aidbox");
+            }
         }
 
         for (int i = 0; i < this.container.length; i++) {
-            if (cntnr.equals(this.container[i])) {      // o codigo do container é unico??? se nao for alterar o equals.
+            if (cntnr.equals(this.container[i])) {  
                 return false;
             }
         }
@@ -205,27 +208,25 @@ public class AidBoxImp implements AidBox {
 
     }
 
-    
-    protected double getValueDistance(AidBox from, AidBox nameTo){
+    protected double getValueDistance(AidBox from, AidBox nameTo) {
         double distance = 0;
         int indexFrom = 0;
-        
-        for(int i = 0; i < locations.length; i++){
-            if ( from.getCode().equals(this.locations[i].getNameFrom())){
+
+        for (int i = 0; i < locations.length; i++) {
+            if (from.getCode().equals(this.locations[i].getNameFrom())) {
                 indexFrom = i;
             }
         }
-        
+
         Location[] aux = locations[indexFrom].getLocationTo();
-        
-        for(int j = 0 ; j < aux.length; j++){
-            if (aux[j].getName().equals(nameTo.getCode())){
+
+        for (int j = 0; j < aux.length; j++) {
+            if (aux[j].getName().equals(nameTo.getCode())) {
                 distance = aux[j].getDistance();
             }
         }
         return distance;
     }
-    
 
     /**
      *
@@ -238,41 +239,50 @@ public class AidBoxImp implements AidBox {
         if (aidbox == null) {
             throw new AidBoxException("aidbox cannot be null");
         }
-        
-        return getValueDistance(this,aidbox);
+
+        return getValueDistance(this, aidbox);
     }
 
-    
-    protected double getValueDuration(AidBox from, AidBox nameTo){
+    protected double getValueDuration(AidBox from, AidBox nameTo) {
         double duration = 0;
         int indexFrom = 0;
-        
-        for(int i = 0; i < locations.length; i++){
-            if ( from.getCode().equals(this.locations[i].getNameFrom())){
+
+        for (int i = 0; i < locations.length; i++) {
+            if (from.getCode().equals(this.locations[i].getNameFrom())) {
                 indexFrom = i;
             }
         }
-        
+
         Location[] aux = locations[indexFrom].getLocationTo();
-        
-        for(int j = 0 ; j < aux.length; j++){
-            if (aux[j].getName().equals(nameTo.getCode())){
+
+        for (int j = 0; j < aux.length; j++) {
+            if (aux[j].getName().equals(nameTo.getCode())) {
                 duration = aux[j].getDuration();
             }
         }
         return duration;
     }
-    
+
     @Override
     public double getDuration(AidBox aidbox) throws AidBoxException {
         if (aidbox == null) {
             throw new AidBoxException("aidbox cannot be null");
         }
 
-       return getValueDuration(this , aidbox);
+        return getValueDuration(this, aidbox);
 
     }
-        
+
+    protected double totalWeightAidbox() {
+
+        double totalWeigth = 0;
+
+        for (int i = 0; i < this.container.length; i++) {
+            totalWeigth += ((ContainerImp) this.container[i]).lastMeasurement();
+        }
+
+        return totalWeigth;
+    }
 
     @Override
     public int hashCode() {
@@ -285,11 +295,11 @@ public class AidBoxImp implements AidBox {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null) {
             return false;
         }
-        
+
         if (getClass() != obj.getClass()) {
             return false;
         }
@@ -297,5 +307,25 @@ public class AidBoxImp implements AidBox {
         return Objects.equals(this.geographicCoordinates, other.geographicCoordinates);
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Code: " + this.code + "\n";
+        s += "Zone: " + this.zone + "\n";
+        s += "Reference Location: " + this.refLocal + "\n";
+        s += "Geographic Coordinates: " + this.geographicCoordinates.toString() + "\n";
+        s += "Containers: ";
+
+        if (container != null) {
+            for (int i = 0; i < nContainers; i++) {
+                s += container[i].toString() + "\n";
+            }
+        }
+
+        s += "\n";
+        return s;
+    }
+
+    
+
 }
- 

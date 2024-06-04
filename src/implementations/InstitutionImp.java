@@ -21,7 +21,6 @@ import com.estg.core.exceptions.MeasurementException;
 import com.estg.core.exceptions.PickingMapException;
 import java.time.LocalDateTime;
 
-
 /**
  *
  * @author diogo
@@ -64,10 +63,8 @@ public class InstitutionImp implements Institution {
     private AidBox[] aidBoxes;
 
     private PickingMap[] pickingMaps;
-    
-    
+
     private Locations[] locations;
-    
 
     public InstitutionImp() {
 
@@ -89,10 +86,11 @@ public class InstitutionImp implements Institution {
     }
 
     private int searchAidBox(AidBox aidbox) {
-
-        for (int i = 0; i < this.aidBoxes.length; i++) {
-            if (aidbox.equals(this.aidBoxes[i])) {
-                return i;
+        if (this.aidBoxes != null) {
+            for (int i = 0; i < this.aidBoxes.length; i++) {
+                if (aidbox.equals(this.aidBoxes[i])) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -116,21 +114,20 @@ public class InstitutionImp implements Institution {
         return aidBoxes[searchAidBox(aidbox)].getContainer(it);
     }
 
-    
     // distancia da base a aidbox ( a base esta sempre na primeira posiçao
     @Override
     public double getDistance(AidBox aidbox) throws AidBoxException {
 
-        if ( aidbox == null ){
+        if (aidbox == null) {
             throw new AidBoxException("Aidbox cannot be null");
         }
-        
-        for ( int i = 0 ; i < this.locations.length; i++){
-            
-            if (aidbox.getCode().equals(this.aidBoxes[i].getCode())){
+
+        for (int i = 0; i < this.locations.length; i++) {
+
+            if (aidbox.getCode().equals(this.aidBoxes[i].getCode())) {
                 return locations[i].getLocationTo()[0].getDistance();
             }
-            
+
         }
         return -1;
     }

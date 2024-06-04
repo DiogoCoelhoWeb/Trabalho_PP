@@ -109,6 +109,16 @@ public class ContainerImp implements Container {
         return this.maxCapacity;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setMaxCapacity(double maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+
+    
     /**
      * Gets all measurements of the container
      *
@@ -127,24 +137,23 @@ public class ContainerImp implements Container {
      */
     @Override
     public Measurement[] getMeasurements(LocalDate ld) {
-
         int count = 0;
 
-        for (int i = 0; i < this.measurements.length; i++) {
-            if (this.measurements[i].getDate().toLocalDate().equals(ld)) {
+        for (int i = 0; i < this.nMeasurements; i++) { 
+            if (this.measurements[i] != null && this.measurements[i].getDate().toLocalDate().equals(ld)) {
                 count++;
             }
         }
 
         Measurement[] aux = new Measurement[count];
         int j = 0;
-        for (int i = 0; i < this.measurements.length; i++) {
-            if (this.measurements[i].getDate().toLocalDate().equals(ld)) {
+        for (int i = 0; i < this.nMeasurements; i++) { 
+            if (this.measurements[i] != null && this.measurements[i].getDate().toLocalDate().equals(ld)) {
                 try {
-                    aux[j] = ((MeasurementImp)this.measurements[i]).clone();
+                    aux[j] = ((MeasurementImp) this.measurements[i]).clone();
                     j++;
                 } catch (CloneNotSupportedException e) {
-                    // ACABAR
+                    Logger.getLogger(ContainerImp.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -189,16 +198,16 @@ public class ContainerImp implements Container {
             throw new MeasurementException("Cannot add a measurement less than 0");
         }
 
-        if (msrmnt.getDate().isBefore(this.measurements[this.nMeasurements - 1].getDate())) {
+        if (this.nMeasurements > 0 && msrmnt.getDate().isBefore(this.measurements[this.nMeasurements - 1].getDate())) {
             throw new MeasurementException("Measurement cannot be before the last measurement");
         }
 
-        // TO DO : perguntar a 4 !
-        for (int i = 0; i < this.measurements.length; i++) {
-            if (this.measurements[i].getDate() == msrmnt.getDate()) {
-                return false; // VERIFICAR ESTA PARTE POR FAVOR
+        for (int i = 0; i < this.nMeasurements; i++) {
+            if (this.measurements[i].getDate().equals(msrmnt.getDate())) {
+                return false;
             }
         }
+
         if (this.nMeasurements == this.measurements.length) {
             expandMeasurements();
         }
@@ -230,6 +239,10 @@ public class ContainerImp implements Container {
 
     protected boolean checkTypeContainer(Container[] cntnr, ItemType it) {
 
+        if (cntnr == null) {
+            return false;
+        }
+
         for (int i = 0; i < cntnr.length; i++) {
             if (cntnr[i].getType() == it) {
                 return true;
@@ -240,12 +253,6 @@ public class ContainerImp implements Container {
 
     protected double lastMeasurement() {
         return this.measurements[this.nMeasurements - 1].getValue(); // 
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
     }
 
     @Override
@@ -263,4 +270,22 @@ public class ContainerImp implements Container {
         return Objects.equals(this.code, other.code);
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Code: " + this.code + "\n";
+        s += "Capacity: " + this.capacity + "\n";
+        s += "Max Capacity: " + this.maxCapacity + "\n";
+        s += "Container Type: " + ItemType.getString(this.containerType) + "\n";
+        s += "Measurements: ";
+
+        if (measurements != null) {
+            for (int i = 0; i < nMeasurements; i++) {
+                s += measurements[i].toString() + " ";
+            }
+        }
+
+        s += "\n";
+        return s;
+    }
 }

@@ -26,7 +26,7 @@ public class GeographicCoordinatesImp implements GeographicCoordinates {
      * @param latitude Distance of the route 
      * @param longitude Total duration of the route
      */
-    GeographicCoordinatesImp(double latitude, double longitude){
+    public GeographicCoordinatesImp(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -51,5 +51,11 @@ public class GeographicCoordinatesImp implements GeographicCoordinates {
         return this.longitude;
     }
     
+    public String toString(){
+        String s = " ";
+        s += "Latitute:" + this.latitude + "\n";
+        s += "longitude:" + this.longitude + "\n";
+        return s;
+    }
     
 }
