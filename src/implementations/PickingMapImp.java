@@ -12,6 +12,8 @@ import com.estg.pickingManagement.PickingMap;
  */
 public class PickingMapImp implements PickingMap {
     
+    private static int INICIALIZE_ROUTE = 5;
+    
     /**
      * The date of the Picking Map
      */
@@ -22,15 +24,18 @@ public class PickingMapImp implements PickingMap {
      */
     private Route[] routes;
     
+    private int nRoutes;
+    
     /**
      * Constructor for the Equipment
      * 
      * @param date date of the picking map 
      * @param routes array of the routes
      */
-    public PickingMapImp(LocalDateTime date, Route[] routes){
+    public PickingMapImp(LocalDateTime date, Route[] routes , int size){
         this.date = date;
-        this.routes = routes;
+        this.routes = new Route[size];
+        this.nRoutes = 0;
     }
     
     /**
@@ -47,5 +52,20 @@ public class PickingMapImp implements PickingMap {
      */
     public Route[] getRoutes(){
         return this.routes;
+    }
+    
+    public void setRoutes(Route[] routes){
+        
+        for ( int i = 0; i < routes.length; i++){
+            if ( routes[i] != null){
+                this.nRoutes++;
+            }
+        }
+        
+        if(this.nRoutes == this.routes.length){
+            this.routes = new Route[nRoutes];
+        }
+        
+        this.routes = routes;
     }
 }

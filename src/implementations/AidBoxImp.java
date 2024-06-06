@@ -85,6 +85,8 @@ public class AidBoxImp implements AidBox {
         this.locations = locations;
     }
 
+    
+    
     /**
      * Gets the code of the aidbox
      *
@@ -306,6 +308,8 @@ public class AidBoxImp implements AidBox {
         final AidBoxImp other = (AidBoxImp) obj;
         return Objects.equals(this.geographicCoordinates, other.geographicCoordinates);
     }
+    
+    
 
     @Override
     public String toString() {

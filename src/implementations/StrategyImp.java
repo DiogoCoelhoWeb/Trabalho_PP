@@ -8,13 +8,13 @@ import com.estg.core.Institution;
 import com.estg.pickingManagement.Route;
 import com.estg.pickingManagement.RouteValidator;
 import com.estg.pickingManagement.Strategy;
-import Classes.RefrigeratedVehicles;
-import Enums.VehicleStatus;
 import com.estg.core.AidBox;
 import com.estg.core.ItemType;
-import java.time.LocalDate;
-import com.estg.pickingManagement.Vehicle;
+import com.estg.core.exceptions.PickingMapException;
 import com.estg.pickingManagement.exceptions.RouteException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,54 +23,54 @@ import com.estg.pickingManagement.exceptions.RouteException;
 public class StrategyImp implements Strategy {
 
     private String name;
-    private ItemType typeOfRoute;
 
     public StrategyImp(String name) {
         this.name = name;
+
     }
 
     @Override
     public Route[] generate(Institution instn, RouteValidator rv) {
-        int index = 0;
-
-        // As aidboxes da instituiçao para fazer marcaçao ponto a ponto
+        RouteImp currentRoute = null;
         Route[] routes = new Route[instn.getAidBoxes().length];
+        int routeIndex = 0;
+        int vehicleIndex = 0;
 
         for (int i = 0; i < instn.getAidBoxes().length; i++) {
-            Vehicle vehicle = chooseVehicle(instn.getVehicles(), instn.getAidBoxes()[i]);
+            AidBox aidBox = instn.getAidBoxes()[i];
+            if (currentRoute == null) { // so faz este if para saber se é a primeira rota 
+                if (vehicleIndex >= instn.getVehicles().length) {
+                    break; // faz o break se nao existir veiculos para a situaçao 
+                }
+                currentRoute = new RouteImp((VehicleImp) instn.getVehicles()[vehicleIndex]);
+                vehicleIndex++;
+            }
 
-            if (vehicle != null) {
-                RouteImp route = new RouteImp(((VehicleImp) vehicle));
-                try {
-                    route.addAidBox(instn.getAidBoxes()[i]);
-                } catch (RouteException e) {
-                }
-                if (rv.validate(route, instn.getAidBoxes()[i])) {
-                    routes[index] = route;
-                    index++;
-                }
+            try {
+                currentRoute.addAidBox(aidBox);
+            } catch (RouteException e) {
+                System.out.println(e.getMessage());
+                continue; // faz skip a aidbox se nao conseguir adicionar
             }
-            else{
-                return null;
+
+            if (!rv.validate(currentRoute, aidBox)) {
+                // se a rota nao é valida com aquela aidbox , começa de novo
+                currentRoute = null;
+                i--; // Para recomeçar com a mesma aidbox mas outro veiculo 
+                continue;
             }
+
+            // Se tudo correr bem , adiciona uma nova rota 
+            routes[routeIndex] = currentRoute;
+            routeIndex++;
         }
 
-        Route[] generateRoutes = new Route[index];
-
-        for (int i = 0; i < index; i++) {
-            generateRoutes[i] = routes[i];
+        
+        Route[] finalRoutes = new Route[routeIndex];
+        for (int i = 0; i < routeIndex; i++) {
+            finalRoutes[i] = routes[i];
         }
         
-        return generateRoutes;
-    }
-
-    private Vehicle chooseVehicle(Vehicle[] vehicle, AidBox aidbox) {
-
-        for (int i = 0; i < vehicle.length; i++) {
-            if (((VehicleImp) vehicle[i]).getStatus() == VehicleStatus.ENABLED && vehicle[i].getMaxCapacity() >= ((AidBoxImp) aidbox).totalWeightAidbox()) {
-                return vehicle[i];
-            }
-        }
-        return null;
+        return finalRoutes;
     }
 }
