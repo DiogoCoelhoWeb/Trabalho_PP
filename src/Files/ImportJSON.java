@@ -6,9 +6,9 @@ package Files;
 
 import Classes.Locations;
 import com.estg.core.Container;
-import implementations.AidBoxImp;
-import implementations.ContainerImp;
-import implementations.GeographicCoordinatesImp;
+import Implementations.AidBoxImp;
+import Implementations.ContainerImp;
+import Implementations.GeographicCoordinatesImp;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +22,7 @@ public class ImportJSON {
 
     public JSONObject getAidBoxJSONObject(String jsonString) {
         JSONObject jsonObject = parseJsonString(jsonString);
+        
         if (jsonObject == null) {
             return null;
         }

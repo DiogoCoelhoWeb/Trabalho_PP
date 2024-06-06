@@ -6,7 +6,7 @@ package Classes;
 
 import Enums.VehicleStatus;
 import com.estg.core.ItemType;
-import implementations.VehicleImp;
+import Implementations.VehicleImp;
 
 /**
  *

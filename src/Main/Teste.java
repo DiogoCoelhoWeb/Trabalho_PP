@@ -1,6 +1,3 @@
-
-
-
 /**
  * Corrigir : 
  * 
@@ -8,19 +5,6 @@
  * 
  * 
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 package Main;
 
@@ -31,10 +15,10 @@ import com.estg.core.ItemType;
 import com.estg.core.Measurement;
 import com.estg.core.exceptions.ContainerException;
 import com.estg.core.exceptions.MeasurementException;
-import implementations.AidBoxImp;
-import implementations.ContainerImp;
-import implementations.GeographicCoordinatesImp;
-import implementations.MeasurementImp;
+import Implementations.AidBoxImp;
+import Implementations.ContainerImp;
+import Implementations.GeographicCoordinatesImp;
+import Implementations.MeasurementImp;
 import java.io.FileReader;
 import java.time.LocalDateTime;
 import org.json.simple.parser.JSONParser;
