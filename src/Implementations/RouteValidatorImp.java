@@ -23,8 +23,13 @@ public class RouteValidatorImp implements RouteValidator {
         }
 
         
-        
-        
+        // Verificar se a aidbox tem pelos menos 1 tipo de contentor que o veiculo da rota pode carregar
+        for (int i = 0; i < aidbox.getContainers().length; i++) {
+            if (route.getVehicle().getSupplyType() != aidbox.getContainers()[i].getType()) {
+                return false;
+            }
+        }
+
         // Verificar se a aidbox tem artigos para levantar 
         for (int i = 0; i < aidbox.getContainers().length; i++) {
             for (int j = 0; j < aidbox.getContainers()[i].getMeasurements().length; j++) {

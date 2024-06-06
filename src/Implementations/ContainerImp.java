@@ -26,6 +26,7 @@ public class ContainerImp implements Container {
      */
     private static final int MEASUREMENT_FACTOR = 15;
 
+    
     /**
      * The code of the container
      */
@@ -69,6 +70,8 @@ public class ContainerImp implements Container {
         this.measurements = new Measurement[MEASUREMENT_FACTOR];
 
     }
+    
+            
 
     /**
      * Gets the code of the container

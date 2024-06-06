@@ -4,7 +4,6 @@
  */
 package Implementations;
 
-import Classes.Location;
 import Classes.Locations;
 import com.estg.core.AidBox;
 import com.estg.core.Institution;
@@ -12,6 +11,7 @@ import com.estg.core.exceptions.VehicleException;
 import com.estg.pickingManagement.Vehicle;
 import com.estg.pickingManagement.PickingMap;
 import Enums.VehicleStatus;
+import Exception.ReportException;
 import com.estg.core.Container;
 import com.estg.core.ItemType;
 import com.estg.core.Measurement;
@@ -19,6 +19,7 @@ import com.estg.core.exceptions.AidBoxException;
 import com.estg.core.exceptions.ContainerException;
 import com.estg.core.exceptions.MeasurementException;
 import com.estg.core.exceptions.PickingMapException;
+import com.estg.pickingManagement.Report;
 import java.time.LocalDateTime;
 
 /**
@@ -30,7 +31,7 @@ public class InstitutionImp implements Institution {
     /**
      * The expand array constant
      */
-    private static int EXPAND_ARRAY = 2;
+    private static final int EXPAND_ARRAY = 2;
 
     /**
      * The name of the institution
@@ -52,6 +53,8 @@ public class InstitutionImp implements Institution {
      */
     private int nPickingMaps;
 
+    private int nReports;
+
     /**
      * The array of vehicles
      */
@@ -64,6 +67,8 @@ public class InstitutionImp implements Institution {
 
     private PickingMap[] pickingMaps;
 
+    private Report[] reports;
+
     private Locations[] locations;
 
     public InstitutionImp() {
@@ -73,6 +78,10 @@ public class InstitutionImp implements Institution {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    public int getNpickingMaps() {
+        return this.nPickingMaps;
     }
 
     @Override
@@ -223,6 +232,7 @@ public class InstitutionImp implements Institution {
         return true;
     }
 
+    @Override
     public boolean addAidBox(AidBox aidbox) throws AidBoxException {
 
         if (aidbox == null) {
@@ -360,6 +370,31 @@ public class InstitutionImp implements Institution {
         }
 
         return aux;
+    }
+
+    private void expandReportArray() {
+
+        Report aux[] = new Report[this.reports.length * EXPAND_ARRAY];
+
+        for (int i = 0; i < this.aidBoxes.length; i++) {
+            aux[i] = this.reports[i];
+        }
+
+        this.reports = aux;
+    }
+
+    public void addReport(Report report) throws ReportException {
+
+        if (report == null) {
+            throw new ReportException("The report cannot be null");
+        }
+
+        if (this.nReports == this.reports.length) {
+            expandReportArray();
+        }
+
+        this.reports[this.nReports++] = report;
+
     }
 
 }
