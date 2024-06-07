@@ -6,8 +6,29 @@ package Exception;
 
 /**
  *
- * @author diogo_coelho
+ * @author diogo
  */
-public class NullJSONObjectExecption {
+public class NullJSONObjectException extends Exception  {
+    
+    public NullJSONObjectException() {
+    }
+
+    /**
+     * Constructor with message
+     * @param message custom message
+     */
+    public NullJSONObjectException(String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor with message and cause
+     * @param message custom message
+     * @param cause cause
+     */
+    public NullJSONObjectException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }
+
