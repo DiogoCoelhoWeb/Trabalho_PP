@@ -7,10 +7,11 @@ package Files;
 import Classes.Location;
 import Classes.Locations;
 import Classes.Readings;
+import Exception.NullJSONObjectException;
 import com.estg.core.Container;
-import implementations.AidBoxImp;
-import implementations.ContainerImp;
-import implementations.GeographicCoordinatesImp;
+import Implementations.AidBoxImp;
+import Implementations.ContainerImp;
+import Implementations.GeographicCoordinatesImp;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,130 +25,65 @@ import java.time.LocalDateTime;
  */
 public class ImportJSONAPI {
 
-    public JSONObject[] getAidBoxJSONObjectArray() {
+    public AidBoxImp[] getAidBoxJSONObjectArray() {
+        
         HTTPProvider provider = new HTTPProvider();
         String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/aidboxes");
         JSONArray jsonArray = parseJsonArray(jsonString);
+        
         if (jsonArray == null) {
             return null;
         }
 
-        JSONObject[] aidBoxJsonArray = new JSONObject[jsonArray.size()];
+        AidBoxImp[] aidBoxes = new AidBoxImp[jsonArray.size()];
 
         // Loop through each object in the jsonArray
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
-            AidBoxImp aidBox = new AidBoxImp(
-                    (String) jsonObject.get("Codigo"),
-                    (String) jsonObject.get("Zona"),
-                    null,
-                    new GeographicCoordinatesImp((double) jsonObject.get("Latitude"), (double) jsonObject.get("Longitude")),
-                    new Locations[0] // falta adicionar as localizaçoes
-            );
-
             JSONArray containers = (JSONArray) jsonObject.get("Contentores");
             Container[] contentorArray = new Container[containers.size()];
+            
             for (int j = 0; j < containers.size(); j++) {
                 JSONObject container = (JSONObject) containers.get(j);
-                Container aux = new ContainerImp(
-                        (String) container.get("codigo"),
-                        ((Long) container.get("capacidade")).doubleValue(),
-                        null
-                );
-
-                ((ContainerImp) aux).setCode((String) container.get("codigo"));
-                ((ContainerImp) aux).setMaxCapacity(((Long) container.get("capacidade")).doubleValue());
-                contentorArray[j] = aux;
+                
+                contentorArray[j] = new ContainerImp( (String) container.get("codigo"), ((Long) container.get("capacidade")).doubleValue(), null);
+                
             }
-            aidBox.setContainers(contentorArray);
-
-            // Convert AidBoxImp object back to JSONObject
-            JSONObject aidBoxJson = new JSONObject();
-            aidBoxJson.put("Codigo", aidBox.getCode());
-            aidBoxJson.put("Zona", aidBox.getZone());
-            aidBoxJson.put("RefLocal", aidBox.getRefLocal());
-            aidBoxJson.put("Latitude", aidBox.getCoordinates().getLatitude());
-            aidBoxJson.put("Longitude", aidBox.getCoordinates().getLongitude());
-
-            JSONArray contentoresJson = new JSONArray();
-            for (Container contentor : aidBox.getContainers()) {
-                JSONObject contJson = new JSONObject();
-                contJson.put("codigo", contentor.getCode());
-                contJson.put("capacidade", ((ContainerImp) contentor).getMaxCapacity());
-                contentoresJson.add(contJson);
-            }
-            aidBoxJson.put("Contentores", contentoresJson);
-
-            aidBoxJsonArray[i] = aidBoxJson;
+            
+            aidBoxes[i] = new AidBoxImp((String) jsonObject.get("Codigo"), (String) jsonObject.get("Zona"), null, new GeographicCoordinatesImp((double) jsonObject.get("Latitude"), (double) jsonObject.get("Longitude")), null);
         }
-        return aidBoxJsonArray;
+        return aidBoxes;
     }
 
-    public JSONObject[] getDistancesJSONObject(String from, String to) {
+    public double getDistanceToAidBoxFromJSON(String from, String to) throws NullJSONObjectException{
         HTTPProvider provider = new HTTPProvider();
+        
         String url = "https://data.mongodb-api.com/app/data-docuz/endpoint/distances?from=" + from + "&to=" + to;
         String jsonString = provider.getFromURL(url);
+        
         JSONObject jsonObject = parseJsonString(jsonString);
+        
         if (jsonObject == null) {
-            return null;
+            throw new NullJSONObjectException("Invalid AidBox in the to or from field");
         }
 
-        JSONArray to1 = (JSONArray) jsonObject.get("to");
-        JSONObject[] locationJsonArray = new JSONObject[to1.size()];
-        for (int j = 0; j < to1.size(); j++) {
-            JSONObject location = (JSONObject) to1.get(j);
-            Location aux = new Location(
-                    (String) location.get("name"),
-                    ((Long) location.get("distance")).doubleValue(),
-                    ((Long) location.get("duration")).doubleValue());
-
-            aux.setDistance(((Long) location.get("distance")).doubleValue());
-            aux.setDuration(((Long) location.get("duration")).doubleValue());
-
-            // Convert Location object back to JSONObject
-            JSONObject locationJson = new JSONObject();
-            locationJson.put("name", aux.getName());
-            locationJson.put("distance", aux.getDistance());
-            locationJson.put("duration", aux.getDuration());
-
-            locationJsonArray[j] = locationJson;
-        }
-
-        return locationJsonArray;
+        return (double) jsonObject.get("distance");
     }
-
-    public JSONObject[] processContainerData() {
+    
+    public double getDurationToAidBoxFromJSON(String from, String to) throws NullJSONObjectException{
         HTTPProvider provider = new HTTPProvider();
-        String url = "https://data.mongodb-api.com/app/data-docuz/endpoint/distances?from=";
+        
+        String url = "https://data.mongodb-api.com/app/data-docuz/endpoint/distances?from=" + from + "&to=" + to;
         String jsonString = provider.getFromURL(url);
-
-        // Parse JSON string into JSONArray
+        
         JSONObject jsonObject = parseJsonString(jsonString);
+        
         if (jsonObject == null) {
-            return null;
+            throw new NullJSONObjectException("Invalid AidBox in the to or from field");
         }
 
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            ContainerData containerData = new ContainerData(
-                    jsonObject.getString("_id"),
-                    jsonObject.getString("contentor"),
-                    jsonObject.getString("data"),
-                    jsonObject.getInt("valor")
-            );
-
-            // Convert ContainerData object back to JSONObject
-            JSONObject containerJson = new JSONObject();
-            containerJson.put("_id", containerData.getId());
-            containerJson.put("contentor", containerData.getContentor());
-            containerJson.put("data", containerData.getData());
-            containerJson.put("valor", containerData.getValor());
-
-            containerJsonArray[i] = containerJson;
-        }
-
-        return containerJsonArray;
+        return (double) jsonObject.get("duration");
     }
 
     private JSONObject parseJsonString(String jsonString) {

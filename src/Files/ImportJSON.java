@@ -25,11 +25,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class ImportJSON {
 
-    public JSONObject getAidBoxJSONObject(String jsonString) {
+    public boolean getAidBoxJSONObject(String jsonString) {
         JSONObject jsonObject = parseJsonString(jsonString);
         
         if (jsonObject == null) {
-            return null;
+            return false;
         }
 
         AidBoxImp aidBox = new AidBoxImp(
@@ -42,17 +42,13 @@ public class ImportJSON {
 
         JSONArray Containers = (JSONArray) jsonObject.get("Contentores");
         Container[] contentorArray = new Container[Containers.size()];
+        
         for (int j = 0; j < Containers.size(); j++) {
             JSONObject container = (JSONObject) Containers.get(j);
-            Container aux = new ContainerImp(
-                    (String) container.get("codigo"),
-                    ((Long) container.get("capacidade")).doubleValue(),
-                    null);
-
-            ((ContainerImp) aux).setCode((String) container.get("codigo"));
-            ((ContainerImp) aux).setMaxCapacity(((Long) container.get("capacidade")).doubleValue());
-            contentorArray[j] = aux;
+            
+            contentorArray[j] = new ContainerImp( (String) container.get("codigo"), ((Long) container.get("capacidade")).doubleValue(), null);
         }
+        
         aidBox.setContainers(contentorArray);
 
         // Convert AidBoxImp object back to JSONObject
@@ -73,7 +69,7 @@ public class ImportJSON {
         }
         aidBoxJson.put("Contentores", contentoresJson);
 
-        return aidBoxJson;
+        return true;
     }
 
     public JSONObject getDistancesJSONObject(String jsonString) {

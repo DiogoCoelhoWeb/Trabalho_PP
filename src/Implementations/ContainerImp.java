@@ -61,16 +61,24 @@ public class ContainerImp implements Container {
      * @param maxCapacity max capacity in kg of the container
      * @param containerType the type of items that belongs to the container
      */
-    public ContainerImp(String code, double maxCapacity, ItemType containerType) {
+    public ContainerImp(String code, double maxCapacity) {
         this.code = code;
         this.capacity = 0;
         this.maxCapacity = maxCapacity;
-        this.containerType = containerType;
+        this.containerType = parseItemType(this.code);
         this.nMeasurements = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR];
-
     }
     
+    
+    public ContainerImp(String code, double maxCapacity, Measurement[] measurements) {
+        this.code = code;
+        this.capacity = 0;
+        this.maxCapacity = maxCapacity;
+        this.containerType = parseItemType(this.code);
+        this.nMeasurements = 0;
+        this.measurements = measurements;
+    }
             
 
     /**
@@ -219,6 +227,19 @@ public class ContainerImp implements Container {
 
         return true;
 
+    }
+    
+    private ItemType parseItemType(String code){
+        switch(code.charAt(0)){
+            case "N":
+            case "n":
+                return ItemType.NON_PERISHABLE_FOOD;
+            case "P":
+            case"p":
+                return ItemType.PERISHABLE_FOOD;
+                //TODO: ItemType
+                    
+        }
     }
 
     /**
