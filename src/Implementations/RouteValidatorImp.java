@@ -15,6 +15,12 @@ import com.estg.pickingManagement.RouteValidator;
  */
 public class RouteValidatorImp implements RouteValidator {
 
+   
+    
+    public RouteValidatorImp(){
+
+    }
+    
     @Override
     public boolean validate(Route route, AidBox aidbox) {
 

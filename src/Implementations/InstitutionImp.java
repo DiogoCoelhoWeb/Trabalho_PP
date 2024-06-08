@@ -71,8 +71,11 @@ public class InstitutionImp implements Institution {
 
     private Locations[] locations;
 
-    public InstitutionImp() {
+    public InstitutionImp(String name, AidBox[] aidBoxes) {
 
+        this.name = name;
+        this.aidBoxes = aidBoxes;
+        
     }
 
     @Override
@@ -317,6 +320,7 @@ public class InstitutionImp implements Institution {
         if (this.nPickingMaps == this.pickingMaps.length) {
             expandPickingMap();
         }
+
 
         this.pickingMaps[this.nPickingMaps++] = pm;
         return true;

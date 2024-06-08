@@ -11,6 +11,7 @@ import com.estg.pickingManagement.Strategy;
 import com.estg.core.AidBox;
 import com.estg.core.ItemType;
 import com.estg.core.exceptions.PickingMapException;
+import com.estg.pickingManagement.PickingMap;
 import com.estg.pickingManagement.exceptions.RouteException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -64,13 +65,15 @@ public class StrategyImp implements Strategy {
             routes[routeIndex] = currentRoute;
             routeIndex++;
         }
-
+        
+        
         
         Route[] finalRoutes = new Route[routeIndex];
         for (int i = 0; i < routeIndex; i++) {
             finalRoutes[i] = routes[i];
         }
         
+       
         return finalRoutes;
     }
 }

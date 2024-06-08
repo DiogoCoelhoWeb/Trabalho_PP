@@ -22,6 +22,10 @@ import java.time.LocalDateTime;
  * @author diogo
  */
 public class RouteGeneratorImp implements RouteGenerator {
+    
+    public RouteGeneratorImp(){
+        
+    }
 
     @Override
     public Route[] generateRoutes(Institution instn, Strategy strtg, RouteValidator rv, Report report) throws PickingMapException {
@@ -34,7 +38,7 @@ public class RouteGeneratorImp implements RouteGenerator {
         int notPickedContainers = 0;
         int notUsedVehicles = 0;
 
-        report = new ReportImp(0, 0, 0, 0, 0, 0, LocalDateTime.now());
+
         Route[] routes = strtg.generate(instn, rv);
 
         for (int i = 0; i < routes.length; i++) {
@@ -59,12 +63,7 @@ public class RouteGeneratorImp implements RouteGenerator {
         notUsedVehicles = instn.getVehicles().length - nUsedVehicles;
         ((ReportImp) report).setNotUsedVehicles(notUsedVehicles);
 
-        PickingMapImp aux = new PickingMapImp(LocalDateTime.now(), routes, routes.length);
-        try {
-            instn.addPickingMap(aux);
-        } catch (PickingMapException e) {
-            System.out.println(e.getMessage());
-        }
+        
         
         try {
             ((InstitutionImp) instn).addReport(report);

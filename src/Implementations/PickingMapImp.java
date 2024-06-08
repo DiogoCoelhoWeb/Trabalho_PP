@@ -32,9 +32,9 @@ public class PickingMapImp implements PickingMap {
      * @param date date of the picking map 
      * @param routes array of the routes
      */
-    public PickingMapImp(LocalDateTime date, Route[] routes , int size){
+    public PickingMapImp(LocalDateTime date){
         this.date = date;
-        this.routes = new Route[size];
+        this.routes = new Route[INICIALIZE_ROUTE];
         this.nRoutes = 0;
     }
     
