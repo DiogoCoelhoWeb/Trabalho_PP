@@ -26,7 +26,6 @@ public class ContainerImp implements Container {
      */
     private static final int MEASUREMENT_FACTOR = 15;
 
-    
     /**
      * The code of the container
      */
@@ -69,8 +68,7 @@ public class ContainerImp implements Container {
         this.nMeasurements = 0;
         this.measurements = new Measurement[MEASUREMENT_FACTOR];
     }
-    
-    
+
     public ContainerImp(String code, double maxCapacity, Measurement[] measurements) {
         this.code = code;
         this.capacity = 0;
@@ -79,7 +77,6 @@ public class ContainerImp implements Container {
         this.nMeasurements = 0;
         this.measurements = measurements;
     }
-            
 
     /**
      * Gets the code of the container
@@ -128,8 +125,6 @@ public class ContainerImp implements Container {
         this.maxCapacity = maxCapacity;
     }
 
-
-    
     /**
      * Gets all measurements of the container
      *
@@ -150,7 +145,7 @@ public class ContainerImp implements Container {
     public Measurement[] getMeasurements(LocalDate ld) {
         int count = 0;
 
-        for (int i = 0; i < this.nMeasurements; i++) { 
+        for (int i = 0; i < this.nMeasurements; i++) {
             if (this.measurements[i] != null && this.measurements[i].getDate().toLocalDate().equals(ld)) {
                 count++;
             }
@@ -158,7 +153,7 @@ public class ContainerImp implements Container {
 
         Measurement[] aux = new Measurement[count];
         int j = 0;
-        for (int i = 0; i < this.nMeasurements; i++) { 
+        for (int i = 0; i < this.nMeasurements; i++) {
             if (this.measurements[i] != null && this.measurements[i].getDate().toLocalDate().equals(ld)) {
                 try {
                     aux[j] = ((MeasurementImp) this.measurements[i]).clone();
@@ -228,17 +223,21 @@ public class ContainerImp implements Container {
         return true;
 
     }
-    
-    private ItemType parseItemType(String code){
-        switch(code.charAt(0)){
-            case "N":
-            case "n":
+
+    private ItemType parseItemType(String code) {
+        char firstLetter = Character.toUpperCase(code.charAt(0));
+        switch (firstLetter) {
+            case 'N':
                 return ItemType.NON_PERISHABLE_FOOD;
-            case "P":
-            case"p":
+            case 'P':
                 return ItemType.PERISHABLE_FOOD;
-                //TODO: ItemType
-                    
+            case 'M':
+                return ItemType.MEDICINE;
+            case 'V':
+                return ItemType.CLOTHING;
+            default:
+                System.out.print("Desconhecido");
+                return null;
         }
     }
 
