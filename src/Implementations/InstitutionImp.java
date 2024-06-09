@@ -400,5 +400,16 @@ public class InstitutionImp implements Institution {
         this.reports[this.nReports++] = report;
 
     }
+    
+    public Report[] getReport(){
+        return this.reports;
+    }
+    
+    public Report getLastReport(){
+        return this.reports[this.nReports];
+    }
 
+    public void printReport(Report report){
+        
+    }
 }

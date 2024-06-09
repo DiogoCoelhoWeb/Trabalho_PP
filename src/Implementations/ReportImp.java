@@ -94,4 +94,16 @@ public class ReportImp implements Report{
         this.date = date;
     }
     
+    public String toString(){
+        String s = "";
+        s += "Date: " + this.date + "\n";
+        s += "Veiculos usados " + this.nUsedVehicles;
+        s += "Veiculos nao usados " + this.notUsedVehicles;
+        s += "Contentores recolhidos " + this.nPickedContainers;
+        s += "Contentores nao recolhidos " + this.notPickedContainers;
+        s += "Distancia total da operaçao" + this.totalDistance;
+        s += "Duraçao total da operaçao" + this.totalDuration;
+        
+        return s;
+    }
 }
