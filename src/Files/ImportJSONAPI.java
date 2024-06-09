@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import com.estg.io.HTTPProvider;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -91,32 +92,32 @@ public class ImportJSONAPI {
     }
 
     public Readings[] getReadingsJSONObjectArray() {
-        HTTPProvider provider = new HTTPProvider();
-        String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/readings");
-        JSONArray jsonArray = parseJsonArray(jsonString);
+    HTTPProvider provider = new HTTPProvider();
+    String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/readings");
+    JSONArray jsonArray = parseJsonArray(jsonString);
 
-        if (jsonArray == null) {
-            return null;
-        }
-
-        Readings[] readings = new Readings[jsonArray.size()];
-
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-
-            String dateTimeString = (String) jsonObject.get("data");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-            OffsetDateTime offsetDateTime = OffsetDateTime.parse(dateTimeString, formatter);
-            LocalDateTime localDateTime = offsetDateTime.toLocalDateTime();
-
-            readings[i] = new Readings(
-                    (String) jsonObject.get("contentor"),
-                    LocalDateTime.parse((String) jsonObject.get("data")),
-                    ((Long) jsonObject.get("valor")).doubleValue()
-            );
-        }
-        return readings;
+    if (jsonArray == null) {
+        return null;
     }
+
+    Readings[] readings = new Readings[jsonArray.size()];
+
+    for (int i = 0; i < jsonArray.size(); i++) {
+        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+        String dateTimeString = (String) jsonObject.get("data");
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTimeString, formatter);
+        LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
+
+        readings[i] = new Readings(
+                (String) jsonObject.get("contentor"),
+                localDateTime, // Use the parsed LocalDateTime object
+                ((Long) jsonObject.get("valor")).doubleValue()
+        );
+    }
+    return readings;
+}
 
     private JSONObject parseJsonString(String jsonString) {
         JSONParser parser = new JSONParser();

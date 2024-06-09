@@ -50,5 +50,12 @@ public class Readings {
         this.value = value;
     }
     
+    public String toString(){
+        String s = "";
+        s+= "Contentor: " + this.codeContainer + "\n";
+        s += "Data: " + this.date + "\n";
+        s += "Valor: " + this.value + "\n";
+        return s;
+    }
     
 }

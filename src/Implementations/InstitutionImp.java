@@ -75,7 +75,7 @@ public class InstitutionImp implements Institution {
 
         this.name = name;
         this.aidBoxes = aidBoxes;
-        
+
     }
 
     @Override
@@ -215,7 +215,7 @@ public class InstitutionImp implements Institution {
 
         AidBox aux[] = new AidBox[this.aidBoxes.length * EXPAND_ARRAY];
 
-        for (int i = 0; i < this.aidBoxes.length; i++) {
+        for (int i = 0; i < this.nAidBoxes; i++) {
             aux[i] = this.aidBoxes[i];
         }
 
@@ -225,6 +225,10 @@ public class InstitutionImp implements Institution {
     private boolean checkSameContainer(AidBox aidbox) {
 
         Container[] aux = aidbox.getContainers();
+        if (aux == null) {
+            return true; 
+        }
+
         for (int i = 0; i < aux.length; i++) {
             for (int j = i + 1; j < aux.length; j++) {
                 if (aux[i].getType() == aux[j].getType()) {
@@ -242,9 +246,7 @@ public class InstitutionImp implements Institution {
             throw new AidBoxException("Aidbox cannot be null");
         }
 
-        if (checkSameContainer(aidbox) == false) {
-            throw new AidBoxException("Aidbox has duplicated containers types");
-        }
+        
 
         if (this.nAidBoxes == this.aidBoxes.length) {
             expandAidBoxArray();
@@ -320,7 +322,6 @@ public class InstitutionImp implements Institution {
         if (this.nPickingMaps == this.pickingMaps.length) {
             expandPickingMap();
         }
-
 
         this.pickingMaps[this.nPickingMaps++] = pm;
         return true;
@@ -400,16 +401,16 @@ public class InstitutionImp implements Institution {
         this.reports[this.nReports++] = report;
 
     }
-    
-    public Report[] getReport(){
+
+    public Report[] getReport() {
         return this.reports;
     }
-    
-    public Report getLastReport(){
+
+    public Report getLastReport() {
         return this.reports[this.nReports];
     }
 
-    public void printReport(Report report){
-        
+    public void printReport(Report report) {
+
     }
 }

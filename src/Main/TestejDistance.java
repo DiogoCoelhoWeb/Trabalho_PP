@@ -4,7 +4,11 @@
  */
 package Main;
 
+import Classes.Readings;
+import Files.ImportJSONAPI;
 import Files.ImportJSONDISTANCES;
+import Implementations.AidBoxImp;
+import com.estg.core.AidBox;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,35 +28,23 @@ public class TestejDistance {
      */
     public static void main(String[] args) throws ParseException {
 
-        // Cria uma instância da classe ImportJSON
-        ImportJSONDISTANCES importJSON = new ImportJSONDISTANCES();
-
-        // O caminho para o arquivo JSON que você deseja processar
-        String filePath = "C:\\Users\\diogo\\Desktop\\moodle\\ExemplosJSON\\jsonFiles\\Distances.json";
-
-        try {
-            // Lê o arquivo JSON em uma string
-            String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
-
-            // Converte a string JSON em um JSONArray
-            JSONParser parser = new JSONParser();
-            JSONArray jsonArray = (JSONArray) parser.parse(jsonString);
-
-            // Processa cada objeto no array
-            for (Object obj : jsonArray) {
-                JSONObject jsonObject = (JSONObject) obj;
-
-                // Converte o JSONObject em uma string
-                String jsonObjectString = jsonObject.toJSONString();
-
-                // Chama o método getDistancesJSONObject
-                JSONObject distancesJson = importJSON.getDistancesJSONObject(jsonObjectString);
-
-                // Imprime o JSONObject resultante
-                System.out.println(distancesJson.toJSONString());
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+        ImportJSONAPI b = new ImportJSONAPI();
+        
+        AidBox[] a = new AidBoxImp[100000];
+        a = b.getAidBoxJSONObjectArray();
+        
+        for(int i = 0 ; i < a.length; i++){
+            System.out.println(((AidBoxImp)a[i]).toString());
+        
+        }
+        
+        
+        Readings[] c = new Readings[10000];
+        c = b.getReadingsJSONObjectArray();
+        
+        for(int i = 0 ; i < c.length; i++){
+            System.out.println(c[i].toString());
+        
         }
     }
 }
