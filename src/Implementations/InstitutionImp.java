@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
  */
 public class InstitutionImp implements Institution {
 
+    private int INICIALIZE = 2;
+    
     /**
      * The expand array constant
      */
@@ -65,12 +67,13 @@ public class InstitutionImp implements Institution {
 
     private Report[] reports;
 
-    private Locations[] locations;
 
     public InstitutionImp(String name) {
 
         this.name = name;
-
+        this.aidBoxes = new AidBoxImp[INICIALIZE];
+        this.pickingMaps = new PickingMapImp[INICIALIZE];
+        this.reports = new ReportImp[INICIALIZE];
     }
 
     @Override
@@ -124,19 +127,7 @@ public class InstitutionImp implements Institution {
     // distancia da base a aidbox ( a base esta sempre na primeira posiçao
     @Override
     public double getDistance(AidBox aidbox) throws AidBoxException {
-
-        if (aidbox == null) {
-            throw new AidBoxException("Aidbox cannot be null");
-        }
-
-        for (int i = 0; i < this.locations.length; i++) {
-
-            if (aidbox.getCode().equals(this.aidBoxes[i].getCode())) {
-                return locations[i].getLocationTo()[0].getDistance();
-            }
-
-        }
-        return -1;
+        return 2;
     }
 
     private int searchVehicle(Vehicle vhcl) {

@@ -33,11 +33,15 @@ public class TestejDistance {
 
         ImportJSONAPI b = new ImportJSONAPI();
 
+        Readings[] readings = new Readings[b.getReadingsJSONObjectArray().length];
+        
         AidBox[] a = new AidBoxImp[100000];
         a = b.getAidBoxJSONObjectArray();
 
-        int tamanho = ((AidBoxImp) a[4]).getContainers().length;
-        System.out.println("" + tamanho);
+        
+        
+        int tamanho = ((AidBoxImp) a[0]).getContainers().length;
+        System.out.println("" + readings[0].getValue());
 
     }
 }

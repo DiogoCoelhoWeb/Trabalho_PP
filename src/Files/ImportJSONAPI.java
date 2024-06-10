@@ -53,7 +53,7 @@ public class ImportJSONAPI {
             for (int j = 0; j < containers.size(); j++) {
                 JSONObject container = (JSONObject) containers.get(j);
 
-                contentorArray[j] = new ContainerImp((String) container.get("codigo"), ((Long) container.get("capacidade")).doubleValue(), null);
+                contentorArray[j] = new ContainerImp((String) container.get("codigo"), ((Long) container.get("capacidade")).doubleValue());
 
             }
 
@@ -108,16 +108,16 @@ public class ImportJSONAPI {
         Readings[] readings = new Readings[jsonArray.size()];
 
         for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            JSONObject readingsArray = (JSONObject) jsonArray.get(i);
 
-            String dateTimeString = (String) jsonObject.get("data");
+            String dateTimeString = (String) readingsArray.get("data");
             dateTimeString = dateTimeString.replace("Z", "");
             LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME);
 
             readings[i] = new Readings(
-                    (String) jsonObject.get("contentor"),
+                    (String) readingsArray.get("contentor"),
                     localDateTime, // Use the parsed LocalDateTime object
-                    ((Long) jsonObject.get("valor")).doubleValue()
+                    ((Long) readingsArray.get("valor")).doubleValue()
             );
         }
         return readings;

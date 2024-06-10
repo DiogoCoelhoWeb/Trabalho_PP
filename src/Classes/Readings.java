@@ -5,6 +5,7 @@
 package Classes;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -48,6 +49,27 @@ public class Readings {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Readings other = (Readings) obj;
+        return Objects.equals(this.codeContainer, other.codeContainer);
     }
     
     public String toString(){
