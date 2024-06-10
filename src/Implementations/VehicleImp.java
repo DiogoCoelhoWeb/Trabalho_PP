@@ -36,9 +36,10 @@ public class VehicleImp implements Vehicle {
      * @param maxCapacity - max capacity of the vehicle
      * @param status - vehicle status ( enable or disabled )
      */
-    public VehicleImp(int maxCapacity, VehicleStatus status) {
+    public VehicleImp(int maxCapacity, VehicleStatus status, ItemType it) {
         this.maxCapacity = maxCapacity;
         this.status = status;
+        this.itemType = it;
     }
 
     /**

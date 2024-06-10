@@ -74,6 +74,12 @@ public class InstitutionImp implements Institution {
         this.aidBoxes = new AidBoxImp[INICIALIZE];
         this.pickingMaps = new PickingMapImp[INICIALIZE];
         this.reports = new ReportImp[INICIALIZE];
+        this.vehicles = new VehicleImp[INICIALIZE];
+        this.nAidBoxes = 0;
+        this.nPickingMaps = 0;
+        this.nReports = 0;
+        this.nVehicles = 0;
+                
     }
 
     @Override
@@ -131,7 +137,10 @@ public class InstitutionImp implements Institution {
     }
 
     private int searchVehicle(Vehicle vhcl) {
-        for (int i = 0; i < vehicles.length; i++) {
+        for (int i = 0; i < this.nVehicles; i++) {
+            if ( vhcl == null){
+                return -1;
+            }
             if (vhcl.equals(this.vehicles[i])) {
                 return i;
             }

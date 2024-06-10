@@ -154,7 +154,6 @@ public class RouteImp implements Route {
 
     @Override
     public void addAidBox(AidBox aidbox) throws RouteException {
-        Container aux = aidbox.getContainer(this.vehicle.getSupplyType());
 
         if (aidbox == null) {
             throw new RouteException("Cannot add a null aidbox");
@@ -164,6 +163,8 @@ public class RouteImp implements Route {
             throw new RouteException("Aidbox already at the route");
         }
 
+        Container aux = aidbox.getContainer(this.vehicle.getSupplyType());
+        
         if (!((ContainerImp) aux).hasContainer(this.vehicle.getSupplyType(), aidbox)) {
             throw new RouteException("Aidbox is not compatible with the vehicle designated to the route");
         }

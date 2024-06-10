@@ -37,11 +37,15 @@ public class TestejDistance {
         
         AidBox[] a = new AidBoxImp[100000];
         a = b.getAidBoxJSONObjectArray();
-
+        
+        int tamanho = a.length;
         
         
-        int tamanho = ((AidBoxImp) a[0]).getContainers().length;
-        System.out.println("" + readings[0].getValue());
+        for ( int i = 0 ; i < tamanho ; i++ ){
+            int tamanho1 = a[i].getContainers().length;
+            System.out.println("" + tamanho1);
+        }
+        
 
     }
 }

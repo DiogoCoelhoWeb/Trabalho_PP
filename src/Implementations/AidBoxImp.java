@@ -136,7 +136,13 @@ public class AidBoxImp implements AidBox {
      */
     @Override
     public Container[] getContainers() {
-        return this.container;
+        Container[] aux = new ContainerImp[this.nContainers];
+        
+        for (int i = 0 ; i < this.nContainers; i++){
+            aux[i] = this.container[i];
+        }
+        
+        return aux;
     }
 
     /**
@@ -148,7 +154,7 @@ public class AidBoxImp implements AidBox {
     @Override
     public Container getContainer(ItemType it) {
 
-        for (int i = 0; i < this.container.length; i++) {
+        for (int i = 0; i < this.nContainers; i++) {
             if (this.container[i].getType() == it) {
                 return this.container[i];
             }

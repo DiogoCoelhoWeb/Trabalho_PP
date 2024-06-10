@@ -24,15 +24,15 @@ public class ReportDemo {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws PickingMapException{
 
         // carregar as aidboxes 
         // carregar as mediçoes
         // Podemos colocar um menu para se escolher os valores e criar veiculo
-        Vehicle vehicle1 = new VehicleImp(500, VehicleStatus.ENABLED);
-        Vehicle vehicle2 = new VehicleImp(300, VehicleStatus.ENABLED);
-        Vehicle vehicle3 = new VehicleImp(500, VehicleStatus.ENABLED);
-        RefrigeratedVehicles vehicle4 = new RefrigeratedVehicles(450, VehicleStatus.ENABLED, 10000);
+        Vehicle vehicle1 = new VehicleImp(500, VehicleStatus.ENABLED, ItemType.CLOTHING);
+        Vehicle vehicle2 = new VehicleImp(300, VehicleStatus.ENABLED, ItemType.MEDICINE);
+        Vehicle vehicle3 = new VehicleImp(500, VehicleStatus.ENABLED, ItemType.NON_PERISHABLE_FOOD);
+        RefrigeratedVehicles vehicle4 = new RefrigeratedVehicles(450, VehicleStatus.ENABLED,ItemType.PERISHABLE_FOOD, 10000);
 
         // cria a inst
         Institution instn = new InstitutionImp("Santa casa");
@@ -68,11 +68,9 @@ public class ReportDemo {
 
         RouteGenerator routeGen = new RouteGeneratorImp();
         Report report = new ReportImp(0, 0, 0, 0, 0, 0, LocalDateTime.now());
-        try {
-            ((PickingMapImp)instn.getPickingMaps()[instn.getPickingMaps().length]).setRoutes(routeGen.generateRoutes(instn,str,v1,report));
-        } catch (PickingMapException ex) {
-            
-        }
+        Route[] route = new RouteImp[10000];
+        route = routeGen.generateRoutes(instn,str,v1,report);
+        
         
         report = ((InstitutionImp)instn).getLastReport();
         String s = ((ReportImp)report).toString();
