@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Implementations;
 
 import Classes.Locations;
@@ -71,10 +67,9 @@ public class InstitutionImp implements Institution {
 
     private Locations[] locations;
 
-    public InstitutionImp(String name, AidBox[] aidBoxes) {
+    public InstitutionImp(String name) {
 
         this.name = name;
-        this.aidBoxes = aidBoxes;
 
     }
 
@@ -223,19 +218,23 @@ public class InstitutionImp implements Institution {
     }
 
     private boolean checkSameContainer(AidBox aidbox) {
+        int contador;
 
         Container[] aux = aidbox.getContainers();
         if (aux == null) {
-            return true; 
+            return true;
         }
+        
+        int count = ((AidBoxImp)aidbox).getNContainers();
 
-        for (int i = 0; i < aux.length; i++) {
-            for (int j = i + 1; j < aux.length; j++) {
-                if (aux[i].getType() == aux[j].getType()) {
+        for (int i = 0; i < count ; i++) {
+            for (int j = i + 1; j < count; j++) {
+                if (aux[i].getType().equals(aux[j].getType())) {
                     return false;
                 }
             }
         }
+
         return true;
     }
 
@@ -246,7 +245,9 @@ public class InstitutionImp implements Institution {
             throw new AidBoxException("Aidbox cannot be null");
         }
 
-        
+        if (checkSameContainer(aidbox) == false) {
+            throw new AidBoxException("Aidbox has duplicated containers types");
+        }
 
         if (this.nAidBoxes == this.aidBoxes.length) {
             expandAidBoxArray();

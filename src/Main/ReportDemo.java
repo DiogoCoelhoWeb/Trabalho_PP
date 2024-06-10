@@ -35,7 +35,7 @@ public class ReportDemo {
         RefrigeratedVehicles vehicle4 = new RefrigeratedVehicles(450, VehicleStatus.ENABLED, 10000);
 
         // cria a inst
-        Institution instn = new InstitutionImp("Santa casa", null);
+        Institution instn = new InstitutionImp("Santa casa");
         Importer importer = new ImporterImp();
         
         try {

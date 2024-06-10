@@ -13,8 +13,6 @@ import Files.ImportJSONAPI;
 import com.estg.core.Measurement;
 import com.estg.core.exceptions.AidBoxException;
 import com.estg.core.exceptions.MeasurementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -52,7 +50,7 @@ public class ImporterImp implements Importer {
         for (int i = 0; i < institution.getAidBoxes().length; i++) {
             for (int j = 0; j < institution.getAidBoxes()[i].getContainers().length; j++) {
                 for (int z = 0; z < readings.length; z++) {
-                    if (institution.getAidBoxes()[i].getContainers()[j].equals(readings[z].getCodeContainer())) {
+                    if (institution.getAidBoxes()[i].getContainers()[j].getCode().equals(readings[z].getCodeContainer())) {
                         Measurement aux = new MeasurementImp(readings[z].getValue(), readings[z].getDate());
                         try {
                             institution.getAidBoxes()[i].getContainers()[j].addMeasurement(aux);

@@ -8,7 +8,10 @@ import Classes.Readings;
 import Files.ImportJSONAPI;
 import Files.ImportJSONDISTANCES;
 import Implementations.AidBoxImp;
+import Implementations.ContainerImp;
 import com.estg.core.AidBox;
+import com.estg.core.Container;
+import com.estg.core.exceptions.ContainerException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,25 +29,15 @@ public class TestejDistance {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, ContainerException {
 
         ImportJSONAPI b = new ImportJSONAPI();
-        
+
         AidBox[] a = new AidBoxImp[100000];
         a = b.getAidBoxJSONObjectArray();
-        
-        for(int i = 0 ; i < a.length; i++){
-            System.out.println(((AidBoxImp)a[i]).toString());
-        
-        }
-        
-        
-        Readings[] c = new Readings[10000];
-        c = b.getReadingsJSONObjectArray();
-        
-        for(int i = 0 ; i < c.length; i++){
-            System.out.println(c[i].toString());
-        
-        }
+
+        int tamanho = ((AidBoxImp) a[4]).getContainers().length;
+        System.out.println("" + tamanho);
+
     }
 }

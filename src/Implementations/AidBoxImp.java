@@ -73,7 +73,7 @@ public class AidBoxImp implements AidBox {
      *
      */
     public AidBoxImp(String code, String zone, String refLocal,
-            GeographicCoordinatesImp geographicCoordinates, Locations[] locations) {
+            GeographicCoordinatesImp geographicCoordinates) {
 
         this.code = code;
         this.zone = zone;
@@ -82,10 +82,12 @@ public class AidBoxImp implements AidBox {
         this.inicializeContainer = ItemType.values().length; // inicializar com o número de enums ItemType
         this.container = new Container[inicializeContainer]; // inicializar com um tamanho maior que 0
         this.nContainers = 0;
-        this.locations = locations;
     }
 
     
+    public int getNContainers(){
+        return this.nContainers;
+    }
     
     /**
      * Gets the code of the aidbox

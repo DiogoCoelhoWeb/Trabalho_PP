@@ -10,6 +10,7 @@ import com.estg.core.Container;
 import Implementations.AidBoxImp;
 import Implementations.ContainerImp;
 import Implementations.GeographicCoordinatesImp;
+import com.estg.core.exceptions.ContainerException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -30,7 +31,7 @@ public class ImportJSONAPI {
 
     }
 
-    public AidBoxImp[] getAidBoxJSONObjectArray() {
+    public AidBoxImp[] getAidBoxJSONObjectArray() throws ContainerException {
 
         HTTPProvider provider = new HTTPProvider();
         String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/aidboxes");
@@ -56,7 +57,11 @@ public class ImportJSONAPI {
 
             }
 
-            aidBoxes[i] = new AidBoxImp((String) jsonObject.get("Codigo"), (String) jsonObject.get("Zona"), null, new GeographicCoordinatesImp((double) jsonObject.get("Latitude"), (double) jsonObject.get("Longitude")), null);
+            aidBoxes[i] = new AidBoxImp((String) jsonObject.get("Codigo"), (String) jsonObject.get("Zona"), null, new GeographicCoordinatesImp((double) jsonObject.get("Latitude"), (double) jsonObject.get("Longitude")));
+            
+            for (int j = 0; j < contentorArray.length; j++){
+                aidBoxes[i].addContainer(contentorArray[j]);
+            }
         }
         return aidBoxes;
     }
@@ -92,32 +97,31 @@ public class ImportJSONAPI {
     }
 
     public Readings[] getReadingsJSONObjectArray() {
-    HTTPProvider provider = new HTTPProvider();
-    String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/readings");
-    JSONArray jsonArray = parseJsonArray(jsonString);
+        HTTPProvider provider = new HTTPProvider();
+        String jsonString = provider.getFromURL("https://data.mongodb-api.com/app/data-docuz/endpoint/readings");
+        JSONArray jsonArray = parseJsonArray(jsonString);
 
-    if (jsonArray == null) {
-        return null;
+        if (jsonArray == null) {
+            return null;
+        }
+
+        Readings[] readings = new Readings[jsonArray.size()];
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+            String dateTimeString = (String) jsonObject.get("data");
+            dateTimeString = dateTimeString.replace("Z", "");
+            LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME);
+
+            readings[i] = new Readings(
+                    (String) jsonObject.get("contentor"),
+                    localDateTime, // Use the parsed LocalDateTime object
+                    ((Long) jsonObject.get("valor")).doubleValue()
+            );
+        }
+        return readings;
     }
-
-    Readings[] readings = new Readings[jsonArray.size()];
-
-    for (int i = 0; i < jsonArray.size(); i++) {
-        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-
-        String dateTimeString = (String) jsonObject.get("data");
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTimeString, formatter);
-        LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
-
-        readings[i] = new Readings(
-                (String) jsonObject.get("contentor"),
-                localDateTime, // Use the parsed LocalDateTime object
-                ((Long) jsonObject.get("valor")).doubleValue()
-        );
-    }
-    return readings;
-}
 
     private JSONObject parseJsonString(String jsonString) {
         JSONParser parser = new JSONParser();
